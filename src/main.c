@@ -24,7 +24,7 @@ struct acceptor {
 
 int main()
 {
-    printf(TGRN "Hello world!\n");
-    printf(TMAG "%d\n", add(3,5));
+    int n;
+    printf(TC_CYAN, "Hello world!\n");
     return 0;
 }
