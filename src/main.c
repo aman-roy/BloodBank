@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "../include/color.h"
 
 struct donor {
     char first_name[20];
@@ -23,6 +24,7 @@ struct acceptor {
 
 int main()
 {
-    printf("Hello world!\n");
+    printf(TGRN "Hello world!\n");
+    printf(TMAG "%d\n", add(3,5));
     return 0;
 }
