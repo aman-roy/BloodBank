@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "../include/color.h"
-
-#define clear() printf("\033[H\033[J")
+#include "../include/utilities.h"
 
 struct donor {
     char first_name[20];
@@ -27,10 +26,22 @@ struct acceptor {
 // Function Prototype
 void headTemplate();
 void mainDisplay();
+void donorAndAccepterDisplay();
+
 
 int main()
 {
     mainDisplay();
+    int ch = takeChoice(0, 5);
+    switch(ch)
+    {
+        case 1:
+            donorAndAccepterDisplay();
+
+            break;
+        default:
+            printf(TD_BOLD "EXIT!\n");
+    }
     return 0;
 }
 
@@ -44,7 +55,7 @@ void headTemplate()
     printf("\t**\t\t\t\t\t\t\t**\n");
     printf("\t**\t\t");
     removeDecoration();
-    printf(TC_BLACK TD_BOLD TD_UNDERLINE BCK_YELLOW"BLOOD BANK MANAGEMENT SYSTEM");
+    printf(TC_BLACK TD_BOLD TD_UNDERLINE BCK_LYELLOW"BLOOD BANK MANAGEMENT SYSTEM");
     removeDecoration();
     printf(TD_BOLD TC_RED"\t\t**\n");
     printf("\t**\t\t\t\t\t\t\t**\n");
@@ -63,6 +74,16 @@ void mainDisplay()
     printf("\t\t\t4. Blood Group Availablity\n");
     printf("\t\t\t5. Get Info\n");
     printf("\t\t\t0. Exit\n\n");
+    removeDecoration();
 }
 
 
+void donorAndAccepterDisplay()
+{
+    headTemplate();
+    printf("\n");
+    printf(TD_BOLD"\t\t\t\t1. Donor\n");
+    printf("\t\t\t\t2. Accepter\n");
+    printf("\t\t\t\t0. Go Back\n\n");
+    removeDecoration();
+}
