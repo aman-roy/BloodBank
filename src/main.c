@@ -6,6 +6,7 @@
 #include "../include/utilities.h"
 
 struct donor {
+    char id[5];
     char name[50];
     int age;
     char nationality[20];
@@ -111,6 +112,7 @@ void addNewRecord()
             scanf("%c", &addNext);
             if (tolower(addNext) == 'y')
                 addNewRecord();
+            main();
             break;
 
         case 2:
@@ -119,6 +121,7 @@ void addNewRecord()
             scanf("%c", &addNext);
             if (tolower(addNext) == 'y')
                 addNewRecord();
+            main();
             break;
 
         case 3:
@@ -144,7 +147,10 @@ void addNewDonor()
 
     struct donor newDonor;
     
-    printf(TD_BOLD"\n\t\tEnter Donor's name: ");
+    printf(TD_BOLD"\n\t\tEnter Donor's ID: _____\b\b\b\b\b");
+    scanf("%s", newDonor.id); 
+
+    printf(TD_BOLD"\t\tEnter Donor's name: ");
     scanf("%c", &temp);
     scanf("%[^\n]", newDonor.name); 
     
@@ -203,7 +209,10 @@ void addNewAcceptor()
 
     struct acceptor newAcceptor;
     
-    printf(TD_BOLD"\n\t\tEnter Acceptor's name: ");
+    printf(TD_BOLD"\n\t\tEnter Acceptor's ID:  _____\b\b\b\b\b");
+    scanf("%s", newAcceptor.info.id);
+
+    printf(TD_BOLD"\t\tEnter Acceptor's name: ");
     scanf("%c", &temp);
     scanf("%[^\n]", newAcceptor.info.name); 
     
