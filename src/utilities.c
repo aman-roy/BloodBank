@@ -11,3 +11,10 @@ int takeChoice(int start, int end)
     removeDecoration();
     return num;
 }
+
+void dbError()
+{
+	printf(TC_RED"\t\t\tDatabase malfuntion!\n");
+    sleep(2);
+    removeDecoration();
+}
