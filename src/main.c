@@ -305,12 +305,9 @@ void displayRecord()
 
 void displayDonor()
 {
-    FILE *fp = fopen("./database/donor.dat", "rb");
+    FILE *fp = loadFile('d');
     if (!fp)
-    {
-       dbError();
        return;
-    }
     
     struct donor temp;
 
@@ -364,12 +361,9 @@ void displayDonor()
 
 void displayAcceptor()
 {
-    FILE *fp = fopen("./database/acceptor.dat", "rb");
+    FILE *fp = loadFile('a');
     if (!fp)
-    {
-       dbError();
        return;
-    }
     
     struct acceptor temp;
 

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "../include/utilities.h"
 #include "../include/color.h"
 
@@ -17,4 +19,23 @@ void dbError()
 	printf(TC_RED"\t\t\tDatabase malfuntion!\n");
     sleep(2);
     removeDecoration();
+}
+
+FILE* loadFile(char fName)
+{
+    FILE *fptr = NULL;
+    if (fName == 'a')
+    {
+        fptr = fopen("./database/acceptor.dat", "rb");
+        if (!fptr)
+           dbError();
+    }
+    else if (fName == 'd')
+    {
+        fptr = fopen("./database/donor.dat", "rb");
+        if (!fptr)
+           dbError();
+    }
+
+    return fptr;
 }

@@ -7,4 +7,6 @@
 // Takes an int between start and end
 int takeChoice(int start, int end);
 
+FILE* loadFile(char fName);
+
 #endif
