@@ -326,6 +326,7 @@ void displayDonor()
         printf(TD_BOLD"  -----------------------------------------------------------------------\n");
 
         int space;
+        rewind(fp);
         while(fread(&temp,sizeof(temp),1,fp))
         {
             printf("     %d\t", temp.id);
@@ -384,8 +385,7 @@ void displayAcceptor()
         printf(TD_BOLD"  -----------------------------------------------------------------------\n");
 
         int space;
-
-        
+        rewind(fp);
         while(fread(&temp,sizeof(temp),1,fp))
         {
             printf("     %d\t", temp.info.id);
