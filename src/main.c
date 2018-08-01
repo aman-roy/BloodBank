@@ -320,26 +320,34 @@ void displayDonor()
     printf(TD_BOLD TD_UNDERLINE TC_YELLOW"\n\t\t\t\tDONOR's LIST\n\n");
     removeDecoration();
 
-    printf(TD_BOLD"     ID            Name                   Age       SEX      BLOOD GROUP \n");
-    printf(TD_BOLD"  -----------------------------------------------------------------------\n");
-    
-    int space;
-    while(fread(&temp,sizeof(temp),1,fp)==1)
+    if(fread(&temp,sizeof(temp),1,fp))
     {
-        printf("     %d\t", temp.id);
-        space = 22 - strlen(temp.name);
-        printf("%s", temp.name);
-        while(space > 0)
+        printf(TD_BOLD"     ID            Name                   Age       SEX      BLOOD GROUP \n");
+        printf(TD_BOLD"  -----------------------------------------------------------------------\n");
+
+        int space;
+        while(fread(&temp,sizeof(temp),1,fp))
         {
-            printf(" ");
-            space--;
+            printf("     %d\t", temp.id);
+            space = 22 - strlen(temp.name);
+            printf("%s", temp.name);
+            while(space > 0)
+            {
+                printf(" ");
+                space--;
+            }
+            printf("    %03d \t     %c \t\t %s\n", temp.age, temp.sex, temp.blood_group);
         }
-        printf("    %03d \t     %c \t\t %s\n", temp.age, temp.sex, temp.blood_group);
+    }
+    else
+    {
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+        removeDecoration();
     }
     
     int choice;
 
-    printf(TC_GREEN"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
         exit(0);
@@ -370,27 +378,36 @@ void displayAcceptor()
     printf(TD_BOLD TD_UNDERLINE TC_YELLOW"\n\t\t\t\tACCEPTOR's LIST\n\n");
     removeDecoration();
 
-    printf(TD_BOLD"     ID            Name                   Age       SEX      BLOOD GROUP \n");
-    printf(TD_BOLD"  -----------------------------------------------------------------------\n");
-
-    int space;
-
-    while(fread(&temp,sizeof(temp),1,fp)==1)
+    if(fread(&temp,sizeof(temp),1,fp))
     {
-        printf("     %d\t", temp.info.id);
-        space = 22 - strlen(temp.info.name);
-        printf("%s", temp.info.name);
-        while(space > 0)
+        printf(TD_BOLD"     ID            Name                   Age       SEX      BLOOD GROUP \n");
+        printf(TD_BOLD"  -----------------------------------------------------------------------\n");
+
+        int space;
+
+        
+        while(fread(&temp,sizeof(temp),1,fp))
         {
-            printf(" ");
-            space--;
+            printf("     %d\t", temp.info.id);
+            space = 22 - strlen(temp.info.name);
+            printf("%s", temp.info.name);
+            while(space > 0)
+            {
+                printf(" ");
+                space--;
+            }
+            printf("    %03d \t     %c \t\t %s\n", temp.info.age, temp.info.sex, temp.info.blood_group);
         }
-        printf("    %03d \t     %c \t\t %s\n", temp.info.age, temp.info.sex, temp.info.blood_group);
+    }
+    else
+    {
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+        removeDecoration();
     }
     
     int choice;
 
-    printf(TC_GREEN"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
         exit(0);
