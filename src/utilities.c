@@ -39,3 +39,12 @@ FILE* loadFile(char fName)
 
     return fptr;
 }
+
+
+void dbSetup()
+{
+    FILE *fp = fopen("./database/acceptor.dat", "ab+");
+    fclose(fp);
+    fp = fopen("./database/donor.dat", "ab+");
+    fclose(fp);
+}

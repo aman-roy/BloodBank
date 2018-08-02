@@ -12,4 +12,6 @@ int takeChoice(int start, int end);
 
 FILE* loadFile(char fName);
 
+void dbSetup();
+
 #endif

@@ -51,6 +51,7 @@ void printAcceptorData(struct acceptor *);
 int main()
 {
     mainDisplay();
+    dbSetup();
     int ch = takeChoice(1, 6);
     switch(ch)
     {
@@ -536,6 +537,8 @@ void searchByID()
 
 void printDonorData(struct donor *data)
 {
+    printf(TD_BOLD TC_CYAN"\n\t\tUSER TYPE: DONOR\n");
+    removeDecoration();
     printf(TD_BOLD"\n\t\tDonor's ID: %d\n", data->id);
     printf(TD_BOLD"\t\tDonor's name: %s\n", data->name);  
     printf(TD_BOLD"\t\tDonor's age: %d\n", data->age);
@@ -550,6 +553,8 @@ void printDonorData(struct donor *data)
 
 void printAcceptorData(struct acceptor *data)
 {
+    printf(TD_BOLD TC_CYAN"\n\t\tUSER TYPE: ACCEPTOR\n");
+    removeDecoration();
     printf(TD_BOLD"\n\t\tAcceptor's ID: %d\n", data->info.id);
     printf(TD_BOLD"\t\tAcceptor's name: %s\n", data->info.name);  
     printf(TD_BOLD"\t\tAcceptor's age: %d\n", data->info.age);
