@@ -4,6 +4,9 @@
 // equivalent to clrscr() in unix
 #define clear() printf("\033[H\033[J")
 
+// DB ERROR
+void dbError();
+
 // Takes an int between start and end
 int takeChoice(int start, int end);
 

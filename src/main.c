@@ -11,10 +11,10 @@ struct donor {
     int age;
     char nationality[20];
     char address[250];
-    char phone_number[10];
+    char phone_number[15];
     char blood_group[10];
     char sex;
-    char date[10];
+    char date[15];
     char time[10];
 };
 
@@ -33,11 +33,20 @@ void donorAndAccepterDisplay();
 
 // Function Prototype for each operations
 void addNewRecord();
+void displayRecord();
+void searchRecord();
+
+
+// Function prototype for sub functions
 void addNewDonor();
 void addNewAcceptor();
-void displayRecord();
 void displayDonor();
 void displayAcceptor();
+void searchByID();
+void searchByName();
+void searchByBloodGroup();
+void printDonorData(struct donor *);
+void printAcceptorData(struct acceptor *);
 
 int main()
 {
@@ -50,6 +59,9 @@ int main()
             break;
         case 2:
             displayRecord();
+            break;
+        case 3:
+            searchRecord();
             break;
         default:
             printf(TD_BOLD "EXIT!\n");
@@ -413,4 +425,141 @@ void displayAcceptor()
     }
 
     removeDecoration();
+}
+
+
+void searchRecord()
+{
+    headTemplate();
+    printf("\n");
+    printf(TD_BOLD"\t\t\t\t1. Search by ID\n");
+    printf("\t\t\t\t2. Search by Name\n");
+    printf("\t\t\t\t3. Search by Blood Group\n");
+    printf("\t\t\t\t4. Go back\n");
+    printf("\t\t\t\t5. Exit\n\n");
+    int choice = takeChoice(1, 5);
+    switch(choice)
+    {
+        case 1:
+            searchByID();
+            int ch;
+            printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to search again or 2 for main menu\n");
+            ch = takeChoice(0, 2);
+            if (!ch)
+                exit(0);
+            if (ch == 1)
+                searchRecord();
+            if (ch == 2)
+                main();
+            removeDecoration();
+            break;
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            exit(0);
+        default:
+            printf(TC_RED"Error!\n");
+    }
+    removeDecoration();
+
+}
+
+
+void searchByID()
+{
+    FILE *fpDonor = loadFile('d');
+    FILE *fpAcceptor = loadFile('a');
+
+    if (!(fpDonor || fpAcceptor))
+        return;
+
+    struct donor tempDonor;
+    struct acceptor tempAcceptor;
+
+    if (fread(&tempDonor,sizeof(tempDonor),1,fpDonor) || fread(&tempAcceptor,sizeof(tempAcceptor),1,fpAcceptor))
+    {
+        clear();
+        headTemplate();
+        rewind(fpDonor);
+        rewind(fpAcceptor);
+
+        int id, entered = 0;
+        printf(TD_BOLD"\n\n\t\t\tEnter ID: ");
+        scanf("%d", &id);
+
+        while(fread(&tempDonor,sizeof(tempDonor),1,fpDonor))
+        {
+            if (tempDonor.id == id)
+            {
+                printf(TD_BOLD"\n\t\t\tMatch Found!\n");
+                sleep(1);
+                printf(TD_BOLD"\t\t\tLoading Data!\n");
+                sleep(1);
+                clear();
+                headTemplate();
+                printDonorData(&tempDonor);
+                entered = 1;
+            }
+        }
+
+        if (!entered)
+        {
+            while(fread(&tempAcceptor,sizeof(tempAcceptor),1,fpAcceptor))
+            {
+                if (tempAcceptor.info.id == id)
+                {
+                    printf(TD_BOLD"\n\t\t\tMatch Found!\n");
+                    sleep(1);
+                    printf(TD_BOLD"\t\t\tLoading Data!\n");
+                    sleep(1);
+                    clear();
+                    headTemplate();
+                    printAcceptorData(&tempAcceptor);
+                    entered = 1;
+                }
+            }
+        }
+            
+        if (!entered)
+        {
+            printf(TC_RED TD_BOLD"\n\t\t\tNOT FOUND!\n");
+        }
+    }
+    else
+    {
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+    }
+    removeDecoration();
+}
+
+
+void printDonorData(struct donor *data)
+{
+    printf(TD_BOLD"\n\t\tDonor's ID: %d\n", data->id);
+    printf(TD_BOLD"\t\tDonor's name: %s\n", data->name);  
+    printf(TD_BOLD"\t\tDonor's age: %d\n", data->age);
+    printf(TD_BOLD"\t\tDonor's nationality: %s\n", data->nationality);
+    printf(TD_BOLD"\t\tDonor's address: %s\n", data->address);
+    printf(TD_BOLD"\t\tDonor's phone number: %s\n", data->phone_number);
+    printf(TD_BOLD"\t\tDonor's blood group: %s\n", data->blood_group);
+    printf(TD_BOLD"\t\tDonor's sex: %c\n", data->sex);
+    printf(TD_BOLD"\t\tBlood donation date[DD/MM/YYYY]: %s\n", data->date);
+    printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: %s\n", data->time);
+}
+
+void printAcceptorData(struct acceptor *data)
+{
+    printf(TD_BOLD"\n\t\tAcceptor's ID: %d\n", data->info.id);
+    printf(TD_BOLD"\t\tAcceptor's name: %s\n", data->info.name);  
+    printf(TD_BOLD"\t\tAcceptor's age: %d\n", data->info.age);
+    printf(TD_BOLD"\t\tAcceptor's nationality: %s\n", data->info.nationality);
+    printf(TD_BOLD"\t\tAcceptor's address: %s\n", data->info.address);
+    printf(TD_BOLD"\t\tAcceptor's phone number: %s\n", data->info.phone_number);
+    printf(TD_BOLD"\t\tAcceptor's blood group: %s\n", data->info.blood_group);
+    printf(TD_BOLD"\t\tAcceptor's sex: %c\n", data->info.sex);
+    printf(TD_BOLD"\t\tTaken Blood on[DD/MM/YYYY]: %s\n", data->info.date);
+    printf(TD_BOLD"\t\tTaken blood at[HH:MM]: %s\n", data->info.time);
+    printf(TD_BOLD"\t\tHospital Name: %s\n", data->hospital);
+    printf(TD_BOLD"\t\tHospital Address: %s\n", data->hospital_address);
 }

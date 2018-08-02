@@ -16,7 +16,7 @@ int takeChoice(int start, int end)
 
 void dbError()
 {
-	printf(TC_RED"\t\t\tDatabase malfuntion!\n");
+	printf(TC_RED TD_BOLD"\t\t\tDatabase malfuntion! Create DB first.\n");
     sleep(2);
     removeDecoration();
 }
