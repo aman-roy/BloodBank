@@ -4,25 +4,7 @@
 
 #include "../include/color.h"
 #include "../include/utilities.h"
-
-struct donor {
-    int id;
-    char name[50];
-    int age;
-    char nationality[20];
-    char address[250];
-    char phone_number[15];
-    char blood_group[10];
-    char sex;
-    char date[15];
-    char time[10];
-};
-
-struct acceptor {
-    struct donor info;
-    char hospital[50];
-    char hospital_address[100];
-};
+#include "../include/containers.h"
 
 
 // Function Prototype for displaying
@@ -42,9 +24,6 @@ void addNewDonor();
 void addNewAcceptor();
 void displayDonor();
 void displayAcceptor();
-void searchByID();
-void searchByName();
-void searchByBloodGroup();
 void printDonorData(struct donor *);
 void printAcceptorData(struct acceptor *);
 
@@ -431,44 +410,6 @@ void displayAcceptor()
 
 void searchRecord()
 {
-    headTemplate();
-    printf("\n");
-    printf(TD_BOLD"\t\t\t\t1. Search by ID\n");
-    printf("\t\t\t\t2. Search by Name\n");
-    printf("\t\t\t\t3. Search by Blood Group\n");
-    printf("\t\t\t\t4. Go back\n");
-    printf("\t\t\t\t5. Exit\n\n");
-    int choice = takeChoice(1, 5);
-    switch(choice)
-    {
-        case 1:
-            searchByID();
-            int ch;
-            printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to search again or 2 for main menu\n");
-            ch = takeChoice(0, 2);
-            if (!ch)
-                exit(0);
-            if (ch == 1)
-                searchRecord();
-            if (ch == 2)
-                main();
-            removeDecoration();
-            break;
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-            exit(0);
-        default:
-            printf(TC_RED"Error!\n");
-    }
-    removeDecoration();
-
-}
-
-
-void searchByID()
-{
     FILE *fpDonor = loadFile('d');
     FILE *fpAcceptor = loadFile('a');
 
@@ -531,8 +472,18 @@ void searchByID()
     {
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
     }
+
+    int choice;
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 for main menu\n");
+    choice = takeChoice(0, 1);
+    if (!choice)
+        exit(0);
+    else
+        main();
+
     removeDecoration();
 }
+
 
 
 void printDonorData(struct donor *data)
