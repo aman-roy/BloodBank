@@ -17,6 +17,7 @@ void donorAndAccepterDisplay();
 void addNewRecord();
 void displayRecord();
 void searchRecord();
+void sortRecord();
 
 
 // Function prototype for sub functions
@@ -26,12 +27,16 @@ void displayDonor();
 void displayAcceptor();
 void printDonorData(struct donor *);
 void printAcceptorData(struct acceptor *);
+void sortDonor();
+void sortAcceptor();
+struct donorNode * getNewDonorNode();
+struct acceptorNode * getNewAcceptorNode();
 
 int main()
 {
     mainDisplay();
     dbSetup();
-    int ch = takeChoice(1, 6);
+    int ch = takeChoice(1, 7);
     switch(ch)
     {
         case 1:
@@ -42,6 +47,9 @@ int main()
             break;
         case 3:
             searchRecord();
+            break;
+        case 4:
+            sortRecord();
             break;
         default:
             printf(TD_BOLD "EXIT!\n");
@@ -75,9 +83,10 @@ void mainDisplay()
     printf(TD_BOLD"\t\t\t1. Add new Record\n");
     printf("\t\t\t2. Display Record\n");
     printf("\t\t\t3. Search Record\n");
-    printf("\t\t\t4. Blood Group Availablity\n");
-    printf("\t\t\t5. Get Info\n");
-    printf("\t\t\t6. Exit\n\n");
+    printf("\t\t\t4. Sort Record\n");
+    printf("\t\t\t5. Blood Group Availablity\n");
+    printf("\t\t\t6. Get Info\n");
+    printf("\t\t\t7. Exit\n\n");
     removeDecoration();
 }
 
@@ -318,7 +327,7 @@ void displayDonor()
         rewind(fp);
         while(fread(&temp,sizeof(temp),1,fp))
         {
-            printf("     %d\t", temp.id);
+            printf("     %03d\t", temp.id);
             space = 22 - strlen(temp.name);
             printf("%s", temp.name);
             while(space > 0)
@@ -374,7 +383,7 @@ void displayAcceptor()
         rewind(fp);
         while(fread(&temp,sizeof(temp),1,fp))
         {
-            printf("     %d\t", temp.info.id);
+            printf("     %03d\t", temp.info.id);
             space = 22 - strlen(temp.info.name);
             printf("%s", temp.info.name);
             while(space > 0)
@@ -490,7 +499,7 @@ void printDonorData(struct donor *data)
 {
     printf(TD_BOLD TC_CYAN"\n\t\tUSER TYPE: DONOR\n");
     removeDecoration();
-    printf(TD_BOLD"\n\t\tDonor's ID: %d\n", data->id);
+    printf(TD_BOLD"\n\t\tDonor's ID: %03d\n", data->id);
     printf(TD_BOLD"\t\tDonor's name: %s\n", data->name);  
     printf(TD_BOLD"\t\tDonor's age: %d\n", data->age);
     printf(TD_BOLD"\t\tDonor's nationality: %s\n", data->nationality);
@@ -506,7 +515,7 @@ void printAcceptorData(struct acceptor *data)
 {
     printf(TD_BOLD TC_CYAN"\n\t\tUSER TYPE: ACCEPTOR\n");
     removeDecoration();
-    printf(TD_BOLD"\n\t\tAcceptor's ID: %d\n", data->info.id);
+    printf(TD_BOLD"\n\t\tAcceptor's ID: %03d\n", data->info.id);
     printf(TD_BOLD"\t\tAcceptor's name: %s\n", data->info.name);  
     printf(TD_BOLD"\t\tAcceptor's age: %d\n", data->info.age);
     printf(TD_BOLD"\t\tAcceptor's nationality: %s\n", data->info.nationality);
@@ -519,3 +528,211 @@ void printAcceptorData(struct acceptor *data)
     printf(TD_BOLD"\t\tHospital Name: %s\n", data->hospital);
     printf(TD_BOLD"\t\tHospital Address: %s\n", data->hospital_address);
 }
+
+void sortRecord()
+{
+    int choice;
+    donorAndAccepterDisplay();
+    choice = takeChoice(1, 4);
+    switch(choice) 
+    {
+        case 1:
+            sortDonor();
+            main();
+            break;
+        case 2:
+            sortAcceptor();
+            main();
+            break;
+        case 3:
+            main();
+
+        case 4:
+            exit(0);
+
+        default:
+            printf(TC_RED"Error!\n");
+    }
+}
+
+struct donorNode * getNewDonorNode()
+{
+    struct donorNode *temp = (struct donorNode *)malloc(sizeof(struct donorNode));
+    temp->next = NULL;
+    return temp;
+}
+
+void sortDonor()
+{
+    FILE *fp = loadFile('d');
+    if (!fp)
+       return;
+    struct donorNode *temp = getNewDonorNode();
+
+    if(fread(&temp->data,sizeof(temp->data),1,fp))
+    {
+        int count = 0;
+        struct donorNode *head = NULL;
+        rewind(fp);
+
+        clear();
+        headTemplate();
+        printf(TD_BOLD"\n\n\n\t\t\tSorting Donor's Data!\n");
+        sleep(2);
+
+        while(fread(&temp->data,sizeof(temp->data),1,fp))
+        {
+            if (head == NULL)
+            {
+                head = temp;
+                temp = getNewDonorNode();
+                count++;
+                continue;
+            }
+            temp->next = head;
+            head = temp;
+            count++;
+            temp = getNewDonorNode();
+        }
+        free(temp);
+
+        printf("Count = %d\n", count);
+        struct donor newTemp;
+        struct donorNode *first = head, *second = head->next;
+        for (int i = 0; i < count; ++i)
+        {
+            for (int j = 0; j < (count-1-i); ++j)
+            {
+                if (first->data.id > second->data.id)
+                {
+                    newTemp = first->data;
+                    first->data = second->data;
+                    second->data = newTemp;
+                }
+                first->next; second->next;
+            }
+        }
+        fclose(fp);
+
+        fp = fopen("./database/donor.dat", "wb");
+        if (!fp)
+        {
+           dbError();
+           return;
+        }
+
+        first = head;
+        while(count--)
+        {
+            fwrite(&head->data,sizeof(head->data),1,fp);
+            head = head->next;
+        }
+        fclose(fp);
+
+        while(first!=NULL)
+        {
+            second = first;
+            first = first->next;
+            free(second);
+        }
+
+        clear();
+        headTemplate();
+        printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tSorting Complete!\n");
+        sleep(2);
+    }
+    else
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+    removeDecoration();
+}
+
+
+struct acceptorNode * getNewAcceptorNode()
+{
+    struct acceptorNode *temp = (struct acceptorNode *)malloc(sizeof(struct acceptorNode));
+    temp->next = NULL;
+    return temp;
+}
+
+void sortAcceptor()
+{
+    FILE *fp = loadFile('a');
+    if (!fp)
+       return;
+    struct acceptorNode *temp = getNewAcceptorNode();
+
+    if(fread(&temp->data,sizeof(temp->data),1,fp))
+    {
+        int count = 0;
+        struct acceptorNode *head = NULL;
+        rewind(fp);
+
+        clear();
+        headTemplate();
+        printf(TD_BOLD"\n\n\n\t\t\tSorting Acceptor's Data!\n");
+        sleep(2);
+
+        while(fread(&temp->data,sizeof(temp->data),1,fp))
+        {
+            if (head == NULL)
+            {
+                head = temp;
+                temp = getNewAcceptorNode();
+                count++;
+                continue;
+            }
+            temp->next = head;
+            head = temp;
+            count++;
+            temp = getNewAcceptorNode();
+        }
+        free(temp);
+
+        printf("Count = %d\n", count);
+        struct acceptor newTemp;
+        struct acceptorNode *first = head, *second = head->next;
+        for (int i = 0; i < count; ++i)
+        {
+            for (int j = 0; j < (count-1-i); ++j)
+            {
+                if (first->data.info.id > second->data.info.id)
+                {
+                    newTemp = first->data;
+                    first->data = second->data;
+                    second->data = newTemp;
+                }
+                first->next; second->next;
+            }
+        }
+        fclose(fp);
+
+        fp = fopen("./database/acceptor.dat", "wb");
+        if (!fp)
+        {
+           dbError();
+           return;
+        }
+
+        first = head;
+        while(count--)
+        {
+            fwrite(&head->data,sizeof(head->data),1,fp);
+            head = head->next;
+        }
+        fclose(fp);
+
+        while(first!=NULL)
+        {
+            second = first;
+            first = first->next;
+            free(second);
+        }
+
+        clear();
+        headTemplate();
+        printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tSorting Complete!\n");
+        sleep(2);
+    }
+    else
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+    removeDecoration();}
