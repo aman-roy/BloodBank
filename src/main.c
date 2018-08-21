@@ -596,7 +596,6 @@ void sortDonor()
         }
         free(temp);
 
-        printf("Count = %d\n", count);
         struct donor newTemp;
         struct donorNode *first = head, *second = head->next;
         for (int i = 0; i < count; ++i)
@@ -609,8 +608,11 @@ void sortDonor()
                     first->data = second->data;
                     second->data = newTemp;
                 }
-                first->next; second->next;
+                first = first->next; 
+                second = second->next;
             }
+            first = head;
+            second = head->next;
         }
         fclose(fp);
 
@@ -642,7 +644,10 @@ void sortDonor()
         sleep(2);
     }
     else
+    {
+        free(temp);
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+    }
     removeDecoration();
 }
 
@@ -688,7 +693,6 @@ void sortAcceptor()
         }
         free(temp);
 
-        printf("Count = %d\n", count);
         struct acceptor newTemp;
         struct acceptorNode *first = head, *second = head->next;
         for (int i = 0; i < count; ++i)
@@ -701,8 +705,11 @@ void sortAcceptor()
                     first->data = second->data;
                     second->data = newTemp;
                 }
-                first->next; second->next;
+                first = first->next; 
+                second = second->next;
             }
+            first = head;
+            second = head->next;
         }
         fclose(fp);
 
@@ -734,5 +741,8 @@ void sortAcceptor()
         sleep(2);
     }
     else
+    {
+        free(temp);
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+    }
     removeDecoration();}
