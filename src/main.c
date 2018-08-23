@@ -5,6 +5,7 @@
 #include "../include/color.h"
 #include "../include/utilities.h"
 #include "../include/containers.h"
+#include "../include/linkedlist.h"
 
 
 // Function Prototype for displaying
@@ -29,8 +30,6 @@ void printDonorData(struct donor *);
 void printAcceptorData(struct acceptor *);
 void sortDonor();
 void sortAcceptor();
-struct donorNode * getNewDonorNode();
-struct acceptorNode * getNewAcceptorNode();
 
 int main()
 {
@@ -555,46 +554,18 @@ void sortRecord()
     }
 }
 
-struct donorNode * getNewDonorNode()
-{
-    struct donorNode *temp = (struct donorNode *)malloc(sizeof(struct donorNode));
-    temp->next = NULL;
-    return temp;
-}
 
 void sortDonor()
 {
-    FILE *fp = loadFile('d');
-    if (!fp)
-       return;
-    struct donorNode *temp = getNewDonorNode();
-
-    if(fread(&temp->data,sizeof(temp->data),1,fp))
+    struct donorBox* box = donorDBtoLL();
+    struct donorNode *head = box->head;
+    int count = box->count;
+    if(head)
     {
-        int count = 0;
-        struct donorNode *head = NULL;
-        rewind(fp);
-
         clear();
         headTemplate();
         printf(TD_BOLD"\n\n\n\t\t\tSorting Donor's Data!\n");
         sleep(2);
-
-        while(fread(&temp->data,sizeof(temp->data),1,fp))
-        {
-            if (head == NULL)
-            {
-                head = temp;
-                temp = getNewDonorNode();
-                count++;
-                continue;
-            }
-            temp->next = head;
-            head = temp;
-            count++;
-            temp = getNewDonorNode();
-        }
-        free(temp);
 
         struct donor newTemp;
         struct donorNode *first = head, *second = head->next;
@@ -614,9 +585,8 @@ void sortDonor()
             first = head;
             second = head->next;
         }
-        fclose(fp);
 
-        fp = fopen("./database/donor.dat", "wb");
+        FILE *fp = fopen("./database/donor.dat", "wb");
         if (!fp)
         {
            dbError();
@@ -645,53 +615,25 @@ void sortDonor()
     }
     else
     {
-        free(temp);
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
     }
+    free(box);
     removeDecoration();
 }
 
 
-struct acceptorNode * getNewAcceptorNode()
-{
-    struct acceptorNode *temp = (struct acceptorNode *)malloc(sizeof(struct acceptorNode));
-    temp->next = NULL;
-    return temp;
-}
-
 void sortAcceptor()
 {
-    FILE *fp = loadFile('a');
-    if (!fp)
-       return;
-    struct acceptorNode *temp = getNewAcceptorNode();
+    struct acceptorBox* box = acceptorDBtoLL();
+    struct acceptorNode *head = box->head;
+    int count = box->count;
 
-    if(fread(&temp->data,sizeof(temp->data),1,fp))
+    if(head)
     {
-        int count = 0;
-        struct acceptorNode *head = NULL;
-        rewind(fp);
-
         clear();
         headTemplate();
         printf(TD_BOLD"\n\n\n\t\t\tSorting Acceptor's Data!\n");
         sleep(2);
-
-        while(fread(&temp->data,sizeof(temp->data),1,fp))
-        {
-            if (head == NULL)
-            {
-                head = temp;
-                temp = getNewAcceptorNode();
-                count++;
-                continue;
-            }
-            temp->next = head;
-            head = temp;
-            count++;
-            temp = getNewAcceptorNode();
-        }
-        free(temp);
 
         struct acceptor newTemp;
         struct acceptorNode *first = head, *second = head->next;
@@ -701,6 +643,7 @@ void sortAcceptor()
             {
                 if (first->data.info.id > second->data.info.id)
                 {
+                    printf("Got here\n");
                     newTemp = first->data;
                     first->data = second->data;
                     second->data = newTemp;
@@ -711,9 +654,8 @@ void sortAcceptor()
             first = head;
             second = head->next;
         }
-        fclose(fp);
 
-        fp = fopen("./database/acceptor.dat", "wb");
+        FILE *fp = fopen("./database/acceptor.dat", "wb");
         if (!fp)
         {
            dbError();
@@ -742,7 +684,8 @@ void sortAcceptor()
     }
     else
     {
-        free(temp);
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
     }
-    removeDecoration();}
+    free(box);
+    removeDecoration();
+}

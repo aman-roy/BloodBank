@@ -32,4 +32,15 @@ struct acceptorNode {
 	struct acceptorNode *next;
 };
 
+struct donorBox {
+    struct donorNode *head;
+    int count;
+};
+
+struct acceptorBox {
+    struct acceptorNode *head;
+    int count;
+};
+
+
 #endif
