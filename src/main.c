@@ -601,12 +601,7 @@ void sortDonor()
         }
         fclose(fp);
 
-        while(first!=NULL)
-        {
-            second = first;
-            first = first->next;
-            free(second);
-        }
+        distroyDonor(first);
 
         clear();
         headTemplate();
@@ -670,12 +665,7 @@ void sortAcceptor()
         }
         fclose(fp);
 
-        while(first!=NULL)
-        {
-            second = first;
-            first = first->next;
-            free(second);
-        }
+        distroyAcceptor(first);
 
         clear();
         headTemplate();

@@ -64,6 +64,8 @@ struct donorBox* donorDBtoLL()
     }
 }
 
+
+
 struct acceptorBox *acceptorDBtoLL()
 {
 	FILE *fp = loadFile('a');
@@ -105,4 +107,24 @@ struct acceptorBox *acceptorDBtoLL()
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
         return NULL;
     }
+}
+
+void distroyAcceptor(struct acceptorNode *head)
+{
+	if (head == NULL)
+	{
+		return;
+	}
+	distroyAcceptor(head->next);
+	free(head);
+}
+
+void distroyDonor(struct donorNode *head)
+{
+	if (head == NULL)
+	{
+		return;
+	}
+	distroyDonor(head->next);
+	free(head);
 }
