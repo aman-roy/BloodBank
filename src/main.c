@@ -20,6 +20,8 @@ void displayRecord();
 void searchRecord();
 void sortRecord();
 void modifyRecord();
+void deleteId();
+void insertAtPos();
 
 
 // Function prototype for sub functions
@@ -33,12 +35,18 @@ void sortDonor();
 void sortAcceptor();
 void modifyDonor();
 void modifyAcceptor();
+void deleteIdDonor();
+void deleteIdAcceptor();
+void deleteDonor();
+void deleteAcceptor();
+void insertAtPosDonor();
+void insertAtPosAcceptor();
 
 int main()
 {
     mainDisplay();
     dbSetup();
-    int ch = takeChoice(1, 7);
+    int ch = takeChoice(1, 8);
     switch(ch)
     {
         case 1:
@@ -55,6 +63,12 @@ int main()
             break;
         case 5:
             modifyRecord();
+            break;
+        case 6:
+            deleteId();
+            break;
+        case 7:
+            insertAtPos();
             break;
         default:
             printf(TD_BOLD "EXIT!\n");
@@ -90,8 +104,9 @@ void mainDisplay()
     printf("\t\t\t3. Search Record\n");
     printf("\t\t\t4. Sort Record\n");
     printf("\t\t\t5. Modify Record\n");
-    printf("\t\t\t6. Get Info\n");
-    printf("\t\t\t7. Exit\n\n");
+    printf("\t\t\t6. Delete Record\n");
+    printf("\t\t\t7. Insert Record at a position\n");
+    printf("\t\t\t8. Exit\n\n");
     removeDecoration();
 }
 
@@ -989,6 +1004,481 @@ void modifyAcceptor()
         exit(0);
     if (choice == 1)
         modifyRecord();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+
+void deleteId()
+{
+    int choice;
+    donorAndAccepterDisplay();
+    printf(TD_BOLD TC_RED"\t\t\t\t5. Delete Everything [DONOR]\n");
+    printf(TD_BOLD TC_RED"\t\t\t\t6. Delete Everything [ACCEPTOR]\n\n");
+    printf(TC_WHITE);
+    choice = takeChoice(1, 6);
+    switch(choice) 
+    {
+        case 1:
+            deleteIdDonor();
+            break;
+        case 2:
+            deleteIdAcceptor();
+            break;
+        case 3:
+            main();
+        case 4:
+            exit(0);
+        case 5:
+            deleteDonor();
+            break;
+        case 6:
+            deleteAcceptor();
+            break;
+        default:
+            printf(TC_RED"Error!\n");
+    }
+}
+
+void deleteIdDonor()
+{
+    struct donorBox* box = donorDBtoLL();
+    struct donorNode *head = box->head;
+    
+    int entered = 0;
+
+    if (head)
+    {
+        int id;
+        clear();
+        headTemplate();
+        printf(TD_BOLD"\n\n\t\tEnter ID to be Deleted: ");
+        scanf("%d", &id);
+
+        FILE *fp = fopen("./database/donor.dat", "wb");
+        if (!fp)
+        {
+           dbError();
+           return;
+        }
+
+        struct donorNode *temp =  head;
+
+        while(head != NULL)
+        {
+            if (head->data.id == id)
+            {
+                entered = 1;
+                head = head->next;
+                continue;
+            }
+
+            fwrite(&head->data,sizeof(head->data),1,fp);
+            head = head->next;
+        }
+        fclose(fp);
+        distroyDonor(temp);
+
+        if (entered)
+        {
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tDeletion Complete!\n");
+            sleep(2);
+        }
+        else
+        {
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_RED"\n\n\n\t\t\tID not Found!\n");
+        }
+    }
+
+
+    free(box);
+
+    int choice;
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        deleteId();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+
+void deleteIdAcceptor()
+{
+    struct acceptorBox* box = acceptorDBtoLL();
+    struct acceptorNode *head = box->head;
+    
+    int entered = 0;
+
+    if (head)
+    {
+        int id;
+        clear();
+        headTemplate();
+        printf(TD_BOLD"\n\n\t\tEnter ID to be Deleted: ");
+        scanf("%d", &id);
+
+        FILE *fp = fopen("./database/acceptor.dat", "wb");
+        if (!fp)
+        {
+           dbError();
+           return;
+        }
+
+        struct acceptorNode *temp =  head;
+
+        while(head != NULL)
+        {
+            if (head->data.info.id == id)
+            {
+                entered = 1;
+                head = head->next;
+                continue;
+            }
+
+            fwrite(&head->data,sizeof(head->data),1,fp);
+            head = head->next;
+        }
+        fclose(fp);
+        distroyAcceptor(temp);
+
+        if (entered)
+        {
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tDeletion Complete!\n");
+            sleep(2);
+        }
+        else
+        {
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_RED"\n\n\n\t\t\tID not Found!\n");
+        }
+    }
+
+
+    free(box);
+
+    int choice;
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        deleteId();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+    return;
+}
+
+void deleteDonor()
+{
+    clear();
+    headTemplate();
+    printf(TD_BOLD TC_RED "\n\n\t\t\tDONOR DELETED COMPLETELY!\n");
+    FILE *fp = fopen("./database/donor.dat", "wb");
+    fclose(fp);
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    int choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        deleteId();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+void deleteAcceptor()
+{
+    clear();
+    headTemplate();
+    printf(TD_BOLD TC_RED "\n\n\t\t\tACCEPTORPTOR DELETED COMPLETELY!\n");
+    FILE *fp = fopen("./database/acceptor.dat", "wb");
+    fclose(fp);
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    int choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        deleteId();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+
+void insertAtPos()
+{
+    int choice;
+    donorAndAccepterDisplay();
+    choice = takeChoice(1, 4);
+    switch(choice) 
+    {
+        case 1:
+            insertAtPosDonor();
+            break;
+        case 2:
+            insertAtPosAcceptor();
+            break;
+        case 3:
+            main();
+        case 4:
+            exit(0);
+        default:
+            printf(TC_RED"Error!\n");
+    }
+}
+
+void insertAtPosDonor()
+{
+    clear();
+    headTemplate();
+    struct donorBox* box = donorDBtoLL();
+    struct donorNode *head = box->head;
+    int count = box->count;
+
+    int pos;
+    int flag = 0;
+    do {
+        if (flag)
+            printf(TC_RED TD_BOLD"\t\t\tCan't insert at that location!\n");
+        if (!flag)
+            printf("\n\n");
+        printf(TD_BOLD TC_WHITE"\t\tEnter position (else 0): _\b");
+        scanf("%d", &pos);
+        if (pos == 0)
+            main();
+        flag = 1;
+    } while(pos < 0 || pos > count+1);
+
+    if (pos == count+1)
+        addNewDonor();
+    else
+    {
+        struct donorNode *t = head;
+        if(pos != 1)
+        {
+            for (int i = 0; i < pos-2; ++i)
+                t = t->next;
+        }
+
+        // temp variable for clearing buffer
+        char temp;
+
+        struct donorNode *newDonor = (struct donorNode*)malloc(sizeof(struct donorNode));
+        
+        printf(TD_BOLD"\n\t\tEnter Donor's ID: _\b");
+        scanf("%d", &newDonor->data.id); 
+
+        printf(TD_BOLD"\t\tEnter Donor's name: ");
+        scanf("%c", &temp);
+        scanf("%[^\n]", newDonor->data.name); 
+        
+
+        printf(TD_BOLD"\t\tEnter Donor's age: _\b");
+        scanf("%d", &newDonor->data.age);
+
+        printf(TD_BOLD"\t\tEnter Donor's nationality: _\b");
+        scanf("%s", newDonor->data.nationality);
+
+        printf(TD_BOLD"\t\tEnter Donor's address: _\b");
+        scanf("%c", &temp);
+        scanf("%[^\n]", newDonor->data.address);
+
+        printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
+        scanf("%s", newDonor->data.phone_number);
+
+        printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
+        scanf("%s", newDonor->data.blood_group);
+
+        printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
+        scanf("%c", &temp);
+        scanf("%c", &newDonor->data.sex);
+
+        printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+        scanf("%s", newDonor->data.date);
+
+        printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+        scanf("%s", newDonor->data.time);
+
+        if (pos == 1)
+        {
+            newDonor->next = head;
+            head = newDonor;
+        }
+        else
+        {
+            newDonor->next = t->next;
+            t->next = newDonor;
+        }
+
+        FILE *fp = fopen("./database/donor.dat", "wb");
+        if (!fp)
+        {
+           dbError();
+           return;
+        }
+
+        t = head;
+        while(t!=NULL)
+        {
+            fwrite(&t->data,sizeof(t->data),1,fp);
+            t = t->next;
+        }
+        fclose(fp);
+    }
+    distroyDonor(head);
+    free(box);
+
+    sleep(2);
+
+    int choice;
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        insertAtPos();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+
+void insertAtPosAcceptor()
+{
+    clear();
+    headTemplate();
+    struct acceptorBox* box = acceptorDBtoLL();
+    struct acceptorNode *head = box->head;
+    int count = box->count;
+
+    int pos;
+    int flag = 0;
+    do {
+        if (flag)
+            printf(TC_RED TD_BOLD"\t\t\tCan't insert at that location!\n");
+        if (!flag)
+            printf("\n\n");
+        printf(TD_BOLD TC_WHITE"\t\tEnter position (else 0): _\b");
+        scanf("%d", &pos);
+        if (pos == 0)
+            main();
+        flag = 1;
+    } while(pos < 0 || pos > count+1);
+
+    if (pos == count+1)
+        addNewAcceptor();
+    else
+    {
+        struct acceptorNode *t = head;
+        if(pos != 1)
+        {
+            for (int i = 0; i < pos-2; ++i)
+                t = t->next;
+        }
+        
+        struct acceptorNode *newAcceptor = (struct acceptorNode*)malloc(sizeof(struct acceptorNode));
+        
+        // temp variable for clearing buffer
+        char temp;
+        
+        printf(TD_BOLD"\n\t\tEnter Acceptor's ID:  _\b");
+        scanf("%d", &newAcceptor->data.info.id);
+
+        printf(TD_BOLD"\t\tEnter Acceptor's name: ");
+        scanf("%c", &temp);
+        scanf("%[^\n]", newAcceptor->data.info.name); 
+        
+
+        printf(TD_BOLD"\t\tEnter Acceptor's age: _\b");
+        scanf("%d", &newAcceptor->data.info.age);
+
+        printf(TD_BOLD"\t\tEnter Acceptor's nationality: _\b");
+        scanf("%s", newAcceptor->data.info.nationality);
+
+        printf(TD_BOLD"\t\tEnter Acceptor's address: _\b");
+        scanf("%c", &temp);
+        scanf("%[^\n]", newAcceptor->data.info.address);
+
+        printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
+        scanf("%s", newAcceptor->data.info.phone_number);
+
+        printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
+        scanf("%s", newAcceptor->data.info.blood_group);
+
+        printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
+        scanf("%c", &temp);
+        scanf("%c", &newAcceptor->data.info.sex);
+
+        printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+        scanf("%s", newAcceptor->data.info.date);
+
+        printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+        scanf("%s", newAcceptor->data.info.time);
+
+        printf(TD_BOLD"\t\tEnter Hospital Name: _\b");
+        scanf("%c", &temp);
+        scanf("%[^\n]", newAcceptor->data.hospital);
+
+        printf(TD_BOLD"\t\tEnter Hospital Address: _\b");
+        scanf("%c", &temp);
+        scanf("%[^\n]", newAcceptor->data.hospital_address);
+
+        if (pos == 1)
+        {
+            newAcceptor->next = head;
+            head = newAcceptor;
+        }
+        else
+        {
+            newAcceptor->next = t->next;
+            t->next = newAcceptor;
+        }
+
+        FILE *fp = fopen("./database/acceptor.dat", "wb");
+        if (!fp)
+        {
+           dbError();
+           return;
+        }
+
+        t = head;
+        while(t!=NULL)
+        {
+            fwrite(&t->data,sizeof(t->data),1,fp);
+            t = t->next;
+        }
+        fclose(fp);
+    }
+    distroyAcceptor(head);
+    free(box);
+
+    int choice;
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        insertAtPos();
     if (choice == 2)
         main();
 

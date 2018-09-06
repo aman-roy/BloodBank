@@ -32,6 +32,7 @@ struct donorBox* donorDBtoLL()
     {
     	int count = 0;
         struct donorNode *head = NULL;
+        struct donorNode *front = NULL;
         rewind(fp);
 
         while(fread(&temp->data,sizeof(temp->data),1,fp))
@@ -39,11 +40,12 @@ struct donorBox* donorDBtoLL()
             if (head == NULL)
             {
                 head = temp;
+                front = head;
                 temp = getNewDonorNode();
                 count++;
                 continue;
             }
-            temp->next = head;
+            head->next = temp;
             head = temp;
             count++;
             temp = getNewDonorNode();
@@ -52,7 +54,7 @@ struct donorBox* donorDBtoLL()
         fclose(fp);
 
         struct donorBox *box = (struct donorBox *)malloc(sizeof(struct donorBox));
-        box->head = head;
+        box->head = front;
         box->count = count;
         return box;
     }
@@ -77,6 +79,7 @@ struct acceptorBox *acceptorDBtoLL()
     {
     	int count = 0;
         struct acceptorNode *head = NULL;
+        struct acceptorNode *front = NULL;
         rewind(fp);
 
         while(fread(&temp->data,sizeof(temp->data),1,fp))
@@ -84,11 +87,12 @@ struct acceptorBox *acceptorDBtoLL()
             if (head == NULL)
             {
                 head = temp;
+                front = head;
                 temp = getNewAcceptorNode();
                 count++;
                 continue;
             }
-            temp->next = head;
+            head->next = temp;
             head = temp;
             count++;
             temp = getNewAcceptorNode();
@@ -97,7 +101,7 @@ struct acceptorBox *acceptorDBtoLL()
         fclose(fp);
 
         struct acceptorBox *box = (struct acceptorBox *)malloc(sizeof(struct acceptorBox));
-        box->head = head;
+        box->head = front;
         box->count = count;
         return box;
     }
