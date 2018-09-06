@@ -19,6 +19,7 @@ void addNewRecord();
 void displayRecord();
 void searchRecord();
 void sortRecord();
+void modifyRecord();
 
 
 // Function prototype for sub functions
@@ -30,6 +31,8 @@ void printDonorData(struct donor *);
 void printAcceptorData(struct acceptor *);
 void sortDonor();
 void sortAcceptor();
+void modifyDonor();
+void modifyAcceptor();
 
 int main()
 {
@@ -49,6 +52,9 @@ int main()
             break;
         case 4:
             sortRecord();
+            break;
+        case 5:
+            modifyRecord();
             break;
         default:
             printf(TD_BOLD "EXIT!\n");
@@ -83,7 +89,7 @@ void mainDisplay()
     printf("\t\t\t2. Display Record\n");
     printf("\t\t\t3. Search Record\n");
     printf("\t\t\t4. Sort Record\n");
-    printf("\t\t\t5. Blood Group Availablity\n");
+    printf("\t\t\t5. Modify Record\n");
     printf("\t\t\t6. Get Info\n");
     printf("\t\t\t7. Exit\n\n");
     removeDecoration();
@@ -660,12 +666,12 @@ void sortAcceptor()
         first = head;
         while(count--)
         {
-            fwrite(&head->data,sizeof(head->data),1,fp);
-            head = head->next;
+            fwrite(&first->data,sizeof(first->data),1,fp);
+            first = first->next;
         }
         fclose(fp);
 
-        distroyAcceptor(first);
+        distroyAcceptor(head);
 
         clear();
         headTemplate();
@@ -677,5 +683,314 @@ void sortAcceptor()
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
     }
     free(box);
+    removeDecoration();
+}
+
+
+void modifyRecord()
+{
+    int choice;
+    donorAndAccepterDisplay();
+    choice = takeChoice(1, 4);
+    switch(choice) 
+    {
+        case 1:
+            modifyDonor();
+            sleep(2);
+            break;
+        case 2:
+            modifyAcceptor();
+            main();
+            break;
+        case 3:
+            main();
+        case 4:
+            exit(0);
+        default:
+            printf(TC_RED"Error!\n");
+    }
+}
+
+
+void modifyDonor()
+{
+    struct donorBox* box = donorDBtoLL();
+    struct donorNode *head = box->head;
+    int count = box->count;
+
+    if (head)
+    {
+        int id;
+        clear();
+        headTemplate();
+        printf(TD_BOLD"\n\n\t\tEnter ID to be modified: ");
+        scanf("%d", &id);
+
+        struct donorNode *temp = head;
+
+        while(temp != NULL)
+        {
+            if (temp->data.id == id)
+                break;
+            temp = temp->next;
+        }
+
+        if(temp)
+        {
+            char t;
+
+            if(wantsToChange("Name"))
+            {
+                printf(TD_BOLD"\t\tEnter Donor's name: ");
+                scanf("%c", &t);
+                scanf("%[^\n]", temp->data.name); 
+            }
+
+            if(wantsToChange("Age"))
+            {
+                printf(TD_BOLD"\t\tEnter Donor's age: _\b");
+                scanf("%d", &temp->data.age);
+            }
+
+            if(wantsToChange("Nationality"))
+            {
+                printf(TD_BOLD"\t\tEnter Donor's nationality: _\b");
+                scanf("%s", temp->data.nationality);
+            }
+
+            if(wantsToChange("Address"))
+            {
+                printf(TD_BOLD"\t\tEnter Donor's address: _\b");
+                scanf("%c", &t);
+                scanf("%[^\n]", temp->data.address);
+            }
+
+            if(wantsToChange("phone_number"))
+            {
+                printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
+                scanf("%s", temp->data.phone_number);
+            }
+
+            if(wantsToChange("Blood_Group"))
+            {
+                printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
+                scanf("%s", temp->data.blood_group);
+            }
+
+            if(wantsToChange("Sex"))
+            {
+                printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
+                scanf("%c", &t);
+                scanf("%c", &temp->data.sex);
+            }
+
+            if(wantsToChange("Date"))
+            {
+                printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+                scanf("%s", temp->data.date);
+            }
+
+            if(wantsToChange("Time"))
+            {
+                printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+                scanf("%s", temp->data.time);
+            }
+
+            FILE *fp = fopen("./database/donor.dat", "wb");
+            if (!fp)
+            {
+               dbError();
+               return;
+            }
+
+            temp = head;
+            while(temp!=NULL)
+            {
+                fwrite(&temp->data,sizeof(temp->data),1,fp);
+                temp = temp->next;
+            }
+            fclose(fp);
+            distroyDonor(head);
+
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tModification Complete!\n");
+            sleep(2);
+
+        }
+        else
+        {
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_RED TD_UNDERLINE"\n\n\t\t\t\tCan't find that ID!");
+            removeDecoration();
+        }
+        
+    }
+    else
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+    
+    free(box);
+
+    int choice;
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        modifyRecord();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+
+void modifyAcceptor()
+{
+    struct acceptorBox* box = acceptorDBtoLL();
+    struct acceptorNode *head = box->head;
+    int count = box->count;
+
+    if (head)
+    {
+        int id;
+        clear();
+        headTemplate();
+        printf(TD_BOLD"\n\n\t\tEnter ID to be modified: ");
+        scanf("%d", &id);
+
+        struct acceptorNode *temp = head;
+
+        while(temp != NULL)
+        {
+            if (temp->data.info.id == id)
+                break;
+            temp = temp->next;
+        }
+
+        if(temp)
+        {
+            char t;
+
+            if(wantsToChange("Name"))
+            {
+                printf(TD_BOLD"\t\tEnter Acceptor's name: ");
+                scanf("%c", &t);
+                scanf("%[^\n]", temp->data.info.name); 
+            }
+
+            if(wantsToChange("Age"))
+            {
+                printf(TD_BOLD"\t\tEnter Acceptor's age: _\b");
+                scanf("%d", &temp->data.info.age);
+            }
+
+            if(wantsToChange("Nationality"))
+            {
+                printf(TD_BOLD"\t\tEnter Acceptor's nationality: _\b");
+                scanf("%s", temp->data.info.nationality);
+            }
+
+            if(wantsToChange("Address"))
+            {
+                printf(TD_BOLD"\t\tEnter Acceptor's address: _\b");
+                scanf("%c", &t);
+                scanf("%[^\n]", temp->data.info.address);
+            }
+
+            if(wantsToChange("phone_number"))
+            {
+                printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
+                scanf("%s", temp->data.info.phone_number);
+            }
+
+            if(wantsToChange("Blood_Group"))
+            {
+                printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
+                scanf("%s", temp->data.info.blood_group);
+            }
+
+            if(wantsToChange("Sex"))
+            {
+                printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
+                scanf("%c", &t);
+                scanf("%c", &temp->data.info.sex);
+            }
+
+            if(wantsToChange("Date"))
+            {
+                printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+                scanf("%s", temp->data.info.date);
+            }
+
+            if(wantsToChange("Time"))
+            {
+                printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+                scanf("%s", temp->data.info.time);
+            }
+
+            if(wantsToChange("Hospital_name"))
+            {
+                printf(TD_BOLD"\t\tEnter Hospital Name: _\b");
+                scanf("%c", &t);
+                scanf("%[^\n]", temp->data.hospital);
+            }
+
+            if(wantsToChange("Hospital_address"))
+            {
+                printf(TD_BOLD"\t\tEnter Hospital Address: _\b");
+                scanf("%c", &temp);
+                scanf("%[^\n]", temp->data.hospital_address);
+            }
+
+
+            FILE *fp = fopen("./database/acceptor.dat", "wb");
+            if (!fp)
+            {
+               dbError();
+               return;
+            }
+
+            temp = head;
+            while(temp!=NULL)
+            {
+                fwrite(&temp->data,sizeof(temp->data),1,fp);
+                temp = temp->next;
+            }
+            fclose(fp);
+            distroyAcceptor(head);
+
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tModification Complete!\n");
+            sleep(2);
+
+        }
+        else
+        {
+            clear();
+            headTemplate();
+            printf(TD_BOLD TC_RED TD_UNDERLINE"\n\n\t\t\t\tCan't find that ID!");
+            removeDecoration();
+        }
+        
+    }
+    else
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
+    
+    free(box);
+
+    int choice;
+
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        modifyRecord();
+    if (choice == 2)
+        main();
+
     removeDecoration();
 }

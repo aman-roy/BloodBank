@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 
 #include "../include/utilities.h"
 #include "../include/color.h"
@@ -47,4 +48,12 @@ void dbSetup()
     fclose(fp);
     fp = fopen("./database/donor.dat", "ab+");
     fclose(fp);
+}
+
+int wantsToChange(char* question)
+{
+    int ch;
+    printf("\t\tYou want to modify %s.[1(yes)/0(no)]: ", question);
+    scanf("%d", &ch);
+    return ch;
 }

@@ -14,4 +14,6 @@ FILE* loadFile(char fName);
 
 void dbSetup();
 
+int wantsToChange(char question[]);
+
 #endif
