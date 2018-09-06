@@ -27,7 +27,7 @@ struct donorBox* donorDBtoLL()
     if (!fp)
        return NULL;
     struct donorNode *temp = getNewDonorNode();
-
+    struct donorBox *box = (struct donorBox *)malloc(sizeof(struct donorBox));
     if(fread(&temp->data,sizeof(temp->data),1,fp))
     {
     	int count = 0;
@@ -53,17 +53,18 @@ struct donorBox* donorDBtoLL()
         free(temp);
         fclose(fp);
 
-        struct donorBox *box = (struct donorBox *)malloc(sizeof(struct donorBox));
         box->head = front;
         box->count = count;
-        return box;
     }
     else
     {
+        box->head = NULL;
+        box->count = 0;
     	free(temp);
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
         return NULL;
     }
+    return box;
 }
 
 
@@ -74,7 +75,7 @@ struct acceptorBox *acceptorDBtoLL()
     if (!fp)
        return NULL;
     struct acceptorNode *temp = getNewAcceptorNode();
-
+    struct acceptorBox *box = (struct acceptorBox *)malloc(sizeof(struct acceptorBox));
     if(fread(&temp->data,sizeof(temp->data),1,fp))
     {
     	int count = 0;
@@ -99,18 +100,19 @@ struct acceptorBox *acceptorDBtoLL()
         }
         free(temp);
         fclose(fp);
-
-        struct acceptorBox *box = (struct acceptorBox *)malloc(sizeof(struct acceptorBox));
+        
         box->head = front;
         box->count = count;
-        return box;
     }
     else
     {
+        box->head = NULL;
+        box->count = 0;
     	free(temp);
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
-        return NULL;
+        sleep(2);
     }
+    return box;
 }
 
 void distroyAcceptor(struct acceptorNode *head)

@@ -73,6 +73,8 @@ int main()
         default:
             printf(TD_BOLD "EXIT!\n");
     }
+
+    removeDecoration();
     return 0;
 }
 
@@ -1207,7 +1209,7 @@ void deleteAcceptor()
 {
     clear();
     headTemplate();
-    printf(TD_BOLD TC_RED "\n\n\t\t\tACCEPTORPTOR DELETED COMPLETELY!\n");
+    printf(TD_BOLD TC_RED "\n\n\t\t\tACCEPTOR DELETED COMPLETELY!\n");
     FILE *fp = fopen("./database/acceptor.dat", "wb");
     fclose(fp);
 
