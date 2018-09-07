@@ -134,3 +134,40 @@ void distroyDonor(struct donorNode *head)
 	distroyDonor(head->next);
 	free(head);
 }
+
+struct donorNode * insertAtTopDonor(struct donorNode * current, struct donorNode * head)
+{
+    struct donorNode *temp = (struct donorNode *)malloc(sizeof(struct donorNode));
+    temp->data = head->data;
+
+    if (current == NULL)
+    {
+        current = temp;
+        current->next = NULL;
+    }
+    else
+    {
+        temp->next = current;
+        current = temp;
+    }
+    return current;
+}
+
+struct acceptorNode * insertAtTopAcceptor(struct acceptorNode * current, struct acceptorNode * head)
+{
+    struct acceptorNode *temp = (struct acceptorNode *)malloc(sizeof(struct acceptorNode));
+    temp->data = head->data;
+
+    if (current == NULL)
+    {
+        current = temp;
+        current->next = NULL;
+    }
+    else
+    {
+        temp->next = current;
+        current = temp;
+    }
+    return current;
+}
+

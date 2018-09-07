@@ -22,6 +22,7 @@ void sortRecord();
 void modifyRecord();
 void deleteId();
 void insertAtPos();
+void reverseRecords();
 
 
 // Function prototype for sub functions
@@ -41,12 +42,14 @@ void deleteDonor();
 void deleteAcceptor();
 void insertAtPosDonor();
 void insertAtPosAcceptor();
+void reverseRecordsDonor();
+void reverseRecordsAcceptor();
 
 int main()
 {
     mainDisplay();
     dbSetup();
-    int ch = takeChoice(1, 8);
+    int ch = takeChoice(1, 9);
     switch(ch)
     {
         case 1:
@@ -69,6 +72,9 @@ int main()
             break;
         case 7:
             insertAtPos();
+            break;
+        case 8:
+            reverseRecords();
             break;
         default:
             printf(TD_BOLD "EXIT!\n");
@@ -108,7 +114,8 @@ void mainDisplay()
     printf("\t\t\t5. Modify Record\n");
     printf("\t\t\t6. Delete Record\n");
     printf("\t\t\t7. Insert Record at a position\n");
-    printf("\t\t\t8. Exit\n\n");
+    printf("\t\t\t8. Reverse records\n");
+    printf("\t\t\t9. Exit\n\n");
     removeDecoration();
 }
 
@@ -1481,6 +1488,136 @@ void insertAtPosAcceptor()
         exit(0);
     if (choice == 1)
         insertAtPos();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+
+void reverseRecords()
+{
+    int choice;
+    donorAndAccepterDisplay();
+    choice = takeChoice(1, 4);
+    switch(choice) 
+    {
+        case 1:
+            reverseRecordsDonor();
+            break;
+        case 2:
+            reverseRecordsAcceptor();
+            break;
+        case 3:
+            main();
+        case 4:
+            exit(0);
+        default:
+            printf(TC_RED"Error!\n");
+    }
+}
+
+void reverseRecordsDonor()
+{
+    struct donorBox* box = donorDBtoLL();
+    struct donorNode *head = box->head;
+    struct donorNode *reverse = NULL;
+
+    clear();
+    headTemplate();
+    printf(TD_BOLD"\n\n\n\t\t\tReversing Donor's Data!\n");
+    sleep(2);
+
+    struct donorNode *temp = head;
+    while(head != NULL)
+    {
+        reverse = insertAtTopDonor(reverse, head);
+        head = head->next;
+    }
+    distroyDonor(temp);
+
+    FILE *fp = fopen("./database/donor.dat", "wb");
+    if (!fp)
+    {
+       dbError();
+       return;
+    }
+
+    head = reverse;
+    while(reverse!=NULL)
+    {
+        fwrite(&reverse->data,sizeof(reverse->data),1,fp);
+        reverse = reverse->next;
+    }
+    fclose(fp);
+
+    distroyDonor(head);
+    free(box);
+
+    clear();
+    headTemplate();
+    printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tReversed!\n");
+
+    int choice;
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        reverseRecords();
+    if (choice == 2)
+        main();
+
+    removeDecoration();
+}
+
+void reverseRecordsAcceptor()
+{
+    struct acceptorBox* box = acceptorDBtoLL();
+    struct acceptorNode *head = box->head;
+    struct acceptorNode *reverse = NULL;
+
+    clear();
+    headTemplate();
+    printf(TD_BOLD"\n\n\n\t\t\tReversing Acceptor's Data!\n");
+    sleep(2);
+
+    struct accptorNode *temp = head;
+    while(head != NULL)
+    {
+        reverse = insertAtTopAcceptor(reverse, head);
+        head = head->next;
+    }
+    distroyAcceptor(temp);
+
+    FILE *fp = fopen("./database/acceptor.dat", "wb");
+    if (!fp)
+    {
+       dbError();
+       return;
+    }
+
+    head = reverse;
+    while(reverse!=NULL)
+    {
+        fwrite(&reverse->data,sizeof(reverse->data),1,fp);
+        reverse = reverse->next;
+    }
+    fclose(fp);
+
+    distroyAcceptor(head);
+    free(box);
+
+    clear();
+    headTemplate();
+    printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tReversed!\n");
+
+    int choice;
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        reverseRecords();
     if (choice == 2)
         main();
 

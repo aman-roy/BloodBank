@@ -10,4 +10,7 @@ struct acceptorBox* acceptorDBtoLL();
 void distroyAcceptor(struct acceptorNode *);
 void distroyDonor(struct donorNode *);
 
+struct donorNode * insertAtTopDonor(struct donorNode *, struct donorNode *);
+struct acceptorNode * insertAtTopAcceptor(struct acceptorNode *, struct acceptorNode *);
+
 #endif
