@@ -3,6 +3,7 @@
 
 #include "../include/utilities.h"
 #include "../include/color.h"
+#include "../include/tree.h"
 
 int takeChoice(int start, int end)
 {
@@ -56,4 +57,33 @@ int wantsToChange(char* question)
     printf("\t\tYou want to modify %s.[1(yes)/0(no)]: ", question);
     scanf("%d", &ch);
     return ch;
+}
+
+int isIdUnique(int newID)
+{
+    struct idTreeNode* root = getTreeID();
+    if (searchTree(root, newID))
+        return 0;
+    else
+        return 1;
+}
+
+
+int getIDInput(char mode)
+{
+    int id, flag = 0;
+    do {
+        if (flag)
+            printf(TC_RED TD_BOLD"\t\t\tID is already in use!\n");
+        if (!flag)
+            printf("\n\n");
+        removeDecoration();
+        if (mode == 'd')
+            printf(TD_BOLD"\t\tEnter Donor's ID: _\b");
+        else
+            printf(TD_BOLD"\t\tEnter Acceptor's ID: _\b");
+        scanf("%d", &id);
+        flag = 1;
+    } while(!isIdUnique(id));
+    return id;
 }

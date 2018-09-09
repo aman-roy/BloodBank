@@ -6,7 +6,7 @@
 #include "../include/utilities.h"
 #include "../include/containers.h"
 #include "../include/linkedlist.h"
-
+#include "../include/tree.h"
 
 // Function Prototype for displaying
 void headTemplate();
@@ -181,9 +181,8 @@ void addNewDonor()
     char temp;
 
     struct donor newDonor;
-    
-    printf(TD_BOLD"\n\t\tEnter Donor's ID: _\b");
-    scanf("%d", &newDonor.id); 
+
+    newDonor.id = getIDInput('d');
 
     printf(TD_BOLD"\t\tEnter Donor's name: ");
     scanf("%c", &temp);
@@ -244,8 +243,7 @@ void addNewAcceptor()
 
     struct acceptor newAcceptor;
     
-    printf(TD_BOLD"\n\t\tEnter Acceptor's ID:  _\b");
-    scanf("%d", &newAcceptor.info.id);
+    newAcceptor.info.id = getIDInput('a');
 
     printf(TD_BOLD"\t\tEnter Acceptor's name: ");
     scanf("%c", &temp);
@@ -1292,8 +1290,7 @@ void insertAtPosDonor()
 
         struct donorNode *newDonor = (struct donorNode*)malloc(sizeof(struct donorNode));
         
-        printf(TD_BOLD"\n\t\tEnter Donor's ID: _\b");
-        scanf("%d", &newDonor->data.id); 
+        newDonor->data.id = getIDInput('d'); 
 
         printf(TD_BOLD"\t\tEnter Donor's name: ");
         scanf("%c", &temp);
@@ -1409,8 +1406,7 @@ void insertAtPosAcceptor()
         // temp variable for clearing buffer
         char temp;
         
-        printf(TD_BOLD"\n\t\tEnter Acceptor's ID:  _\b");
-        scanf("%d", &newAcceptor->data.info.id);
+        newAcceptor->data.info.id = getIDInput('a');
 
         printf(TD_BOLD"\t\tEnter Acceptor's name: ");
         scanf("%c", &temp);

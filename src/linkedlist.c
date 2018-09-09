@@ -62,7 +62,6 @@ struct donorBox* donorDBtoLL()
         box->count = 0;
     	free(temp);
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
-        return NULL;
     }
     return box;
 }

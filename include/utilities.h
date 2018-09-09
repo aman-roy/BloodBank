@@ -16,4 +16,8 @@ void dbSetup();
 
 int wantsToChange(char question[]);
 
+int isIdUnique(int newID);
+
+int getIDInput(char mode);
+
 #endif

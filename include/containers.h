@@ -42,5 +42,10 @@ struct acceptorBox {
     int count;
 };
 
+struct idTreeNode {
+    int id;
+    struct idTreeNode *left;
+    struct idTreeNode *right;
+};
 
 #endif
