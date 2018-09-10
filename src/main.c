@@ -9,12 +9,12 @@
 #include "../include/containers.h"
 #include "../include/linkedlist.h"
 #include "../include/tree.h"
+#include "../include/validation.h"
 
 // Function Prototype for displaying
 void headTemplate();
 void mainDisplay();
 void donorAndAccepterDisplay();
-
 
 // Function Prototype for each operations
 void addNewRecord();
@@ -25,7 +25,7 @@ void modifyRecord();
 void deleteId();
 void insertAtPos();
 void reverseRecords();
-
+void printIdTree();
 
 // Function prototype for sub functions
 void addNewDonor();
@@ -51,7 +51,7 @@ int main()
 {
     mainDisplay();
     dbSetup();
-    int ch = takeChoice(1, 9);
+    int ch = takeChoice(1, 10);
     switch(ch)
     {
         case 1:
@@ -78,6 +78,8 @@ int main()
         case 8:
             reverseRecords();
             break;
+        case 9:
+            printIdTree();
         default:
             printf(TD_BOLD "EXIT!\n");
     }
@@ -85,7 +87,6 @@ int main()
     removeDecoration();
     return 0;
 }
-
 
 void headTemplate()
 {
@@ -117,10 +118,10 @@ void mainDisplay()
     printf("\t\t\t6. Delete Record\n");
     printf("\t\t\t7. Insert Record at a position\n");
     printf("\t\t\t8. Reverse records\n");
-    printf("\t\t\t9. Exit\n\n");
+    printf("\t\t\t9. Print ID tree\n");
+    printf("\t\t\t10. Exit\n\n");
     removeDecoration();
 }
-
 
 void donorAndAccepterDisplay()
 {
@@ -133,14 +134,12 @@ void donorAndAccepterDisplay()
     removeDecoration();
 }
 
-
 void addNewRecord()
 {
     int choice;
     char addNext = 'n';
     donorAndAccepterDisplay();
     choice = takeChoice(1, 4);
-
     switch(choice)
     {
         case 1:
@@ -151,7 +150,6 @@ void addNewRecord()
                 addNewRecord();
             main();
             break;
-
         case 2:
             addNewAcceptor();
             printf(TD_BOLD"\t\tDo you want to add more records? (y/n): _\b");
@@ -160,64 +158,45 @@ void addNewRecord()
                 addNewRecord();
             main();
             break;
-
         case 3:
             main();
-
         case 4:
             exit(0);
-
         default:
             printf(TC_RED"Error!\n");
     }
 }
-
-
 
 void addNewDonor()
 {
     clear();
     headTemplate();
 
-    // temp variable for clearing buffer
     char temp;
-
     struct donor newDonor;
 
     newDonor.id = getIDInput('d');
-
     printf(TD_BOLD"\t\tEnter Donor's name: ");
     scanf("%c", &temp);
     scanf("%[^\n]", newDonor.name); 
-    
-
-    printf(TD_BOLD"\t\tEnter Donor's age: _\b");
-    scanf("%d", &newDonor.age);
-
+    newDonor.age = getAgeInput('d');
     printf(TD_BOLD"\t\tEnter Donor's nationality: _\b");
     scanf("%s", newDonor.nationality);
-
     printf(TD_BOLD"\t\tEnter Donor's address: _\b");
     scanf("%c", &temp);
     scanf("%[^\n]", newDonor.address);
-
     printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
     scanf("%s", newDonor.phone_number);
-
     printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
     scanf("%s", newDonor.blood_group);
-
     printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
     scanf("%c", &temp);
     scanf("%c", &newDonor.sex);
-
     printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
     scanf("%s", newDonor.date);
-
     printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
     scanf("%s", newDonor.time);
 
-    // Write all the data to the file
     FILE *fp = fopen("./database/donor.dat", "ab+");
     if (!fp)
     {
@@ -234,59 +213,42 @@ void addNewDonor()
     removeDecoration();
 }
 
-
 void addNewAcceptor()
 {
     clear();
     headTemplate();
 
-    // temp variable for clearing buffer
     char temp;
-
     struct acceptor newAcceptor;
     
     newAcceptor.info.id = getIDInput('a');
-
     printf(TD_BOLD"\t\tEnter Acceptor's name: ");
     scanf("%c", &temp);
     scanf("%[^\n]", newAcceptor.info.name); 
-    
-
-    printf(TD_BOLD"\t\tEnter Acceptor's age: _\b");
-    scanf("%d", &newAcceptor.info.age);
-
+    newAcceptor.info.age = getAgeInput('a');;
     printf(TD_BOLD"\t\tEnter Acceptor's nationality: _\b");
     scanf("%s", newAcceptor.info.nationality);
-
     printf(TD_BOLD"\t\tEnter Acceptor's address: _\b");
     scanf("%c", &temp);
     scanf("%[^\n]", newAcceptor.info.address);
-
     printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
     scanf("%s", newAcceptor.info.phone_number);
-
     printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
     scanf("%s", newAcceptor.info.blood_group);
-
     printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
     scanf("%c", &temp);
     scanf("%c", &newAcceptor.info.sex);
-
     printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
     scanf("%s", newAcceptor.info.date);
-
     printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
     scanf("%s", newAcceptor.info.time);
-
     printf(TD_BOLD"\t\tEnter Hospital Name: _\b");
     scanf("%c", &temp);
     scanf("%[^\n]", newAcceptor.hospital);
-
     printf(TD_BOLD"\t\tEnter Hospital Address: _\b");
     scanf("%c", &temp);
     scanf("%[^\n]", newAcceptor.hospital_address);
 
-    // Write all the data to the file
     FILE *fp = fopen("./database/acceptor.dat", "ab+");
     if (!fp)
     {
@@ -309,25 +271,20 @@ void displayRecord()
 
     donorAndAccepterDisplay();
     choice = takeChoice(1, 4);
-
     switch(choice)
     {
         case 1:
             displayDonor();
             main();
             break;
-
         case 2:
             displayAcceptor();
             main();
             break;
-
         case 3:
             main();
-
         case 4:
             exit(0);
-
         default:
             printf(TC_RED"Error!\n");
     }
@@ -338,15 +295,11 @@ void displayDonor()
     FILE *fp = loadFile('d');
     if (!fp)
        return;
-    
     struct donor temp;
-
     clear();
     headTemplate();
-
     printf(TD_BOLD TD_UNDERLINE TC_YELLOW"\n\t\t\t\tDONOR's LIST\n\n");
     removeDecoration();
-
     if(fread(&temp,sizeof(temp),1,fp))
     {
         printf(TD_BOLD"     ID            Name                   Age       SEX      BLOOD GROUP \n");
@@ -372,9 +325,8 @@ void displayDonor()
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
         removeDecoration();
     }
-    
-    int choice;
 
+    int choice;
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -382,10 +334,7 @@ void displayDonor()
     if (choice == 1)
         displayRecord();
     if (choice == 2)
-    {
         main();
-    }
-
     removeDecoration();
 }
 
@@ -394,12 +343,10 @@ void displayAcceptor()
     FILE *fp = loadFile('a');
     if (!fp)
        return;
-    
     struct acceptor temp;
 
     clear();
     headTemplate();
-
     printf(TD_BOLD TD_UNDERLINE TC_YELLOW"\n\t\t\t\tACCEPTOR's LIST\n\n");
     removeDecoration();
 
@@ -430,7 +377,6 @@ void displayAcceptor()
     }
     
     int choice;
-
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -438,13 +384,9 @@ void displayAcceptor()
     if (choice == 1)
         displayRecord();
     if (choice == 2)
-    {
         main();
-    }
-
     removeDecoration();
 }
-
 
 void searchRecord()
 {
@@ -467,7 +409,6 @@ void searchRecord()
         int id, entered = 0;
         printf(TD_BOLD"\n\n\t\t\tEnter ID: ");
         scanf("%d", &id);
-
         while(fread(&tempDonor,sizeof(tempDonor),1,fpDonor))
         {
             if (tempDonor.id == id)
@@ -502,14 +443,10 @@ void searchRecord()
         }
             
         if (!entered)
-        {
             printf(TC_RED TD_BOLD"\n\t\t\tNOT FOUND!\n");
-        }
     }
     else
-    {
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
-    }
 
     int choice;
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 for main menu\n");
@@ -521,8 +458,6 @@ void searchRecord()
 
     removeDecoration();
 }
-
-
 
 void printDonorData(struct donor *data)
 {
@@ -575,10 +510,8 @@ void sortRecord()
             break;
         case 3:
             main();
-
         case 4:
             exit(0);
-
         default:
             printf(TC_RED"Error!\n");
     }
@@ -639,13 +572,10 @@ void sortDonor()
         sleep(2);
     }
     else
-    {
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
-    }
     free(box);
     removeDecoration();
 }
-
 
 void sortAcceptor()
 {
@@ -710,7 +640,6 @@ void sortAcceptor()
     removeDecoration();
 }
 
-
 void modifyRecord()
 {
     int choice;
@@ -762,71 +691,59 @@ void modifyDonor()
         if(temp)
         {
             char t;
-
             if(wantsToChange("Name"))
             {
                 printf(TD_BOLD"\t\tEnter Donor's name: ");
                 scanf("%c", &t);
                 scanf("%[^\n]", temp->data.name); 
             }
-
             if(wantsToChange("Age"))
             {
-                printf(TD_BOLD"\t\tEnter Donor's age: _\b");
-                scanf("%d", &temp->data.age);
+                temp->data.age = getAgeInput('d');;
             }
-
             if(wantsToChange("Nationality"))
             {
                 printf(TD_BOLD"\t\tEnter Donor's nationality: _\b");
                 scanf("%s", temp->data.nationality);
             }
-
             if(wantsToChange("Address"))
             {
                 printf(TD_BOLD"\t\tEnter Donor's address: _\b");
                 scanf("%c", &t);
                 scanf("%[^\n]", temp->data.address);
             }
-
             if(wantsToChange("phone_number"))
             {
                 printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
                 scanf("%s", temp->data.phone_number);
             }
-
             if(wantsToChange("Blood_Group"))
             {
                 printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
                 scanf("%s", temp->data.blood_group);
             }
-
             if(wantsToChange("Sex"))
             {
                 printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
                 scanf("%c", &t);
                 scanf("%c", &temp->data.sex);
             }
-
             if(wantsToChange("Date"))
             {
                 printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
                 scanf("%s", temp->data.date);
             }
-
             if(wantsToChange("Time"))
             {
                 printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
                 scanf("%s", temp->data.time);
             }
-
             FILE *fp = fopen("./database/donor.dat", "wb");
             if (!fp)
             {
                dbError();
                return;
             }
-
             temp = head;
             while(temp!=NULL)
             {
@@ -857,7 +774,6 @@ void modifyDonor()
     free(box);
 
     int choice;
-
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -866,7 +782,6 @@ void modifyDonor()
         modifyRecord();
     if (choice == 2)
         main();
-
     removeDecoration();
 }
 
@@ -883,91 +798,75 @@ void modifyAcceptor()
         headTemplate();
         printf(TD_BOLD"\n\n\t\tEnter ID to be modified: ");
         scanf("%d", &id);
-
         struct acceptorNode *temp = head;
-
         while(temp != NULL)
         {
             if (temp->data.info.id == id)
                 break;
             temp = temp->next;
         }
-
         if(temp)
         {
             char t;
-
             if(wantsToChange("Name"))
             {
                 printf(TD_BOLD"\t\tEnter Acceptor's name: ");
                 scanf("%c", &t);
                 scanf("%[^\n]", temp->data.info.name); 
             }
-
             if(wantsToChange("Age"))
             {
-                printf(TD_BOLD"\t\tEnter Acceptor's age: _\b");
-                scanf("%d", &temp->data.info.age);
+                temp->data.info.age = getAgeInput('a');;
             }
-
             if(wantsToChange("Nationality"))
             {
                 printf(TD_BOLD"\t\tEnter Acceptor's nationality: _\b");
                 scanf("%s", temp->data.info.nationality);
             }
-
             if(wantsToChange("Address"))
             {
                 printf(TD_BOLD"\t\tEnter Acceptor's address: _\b");
                 scanf("%c", &t);
                 scanf("%[^\n]", temp->data.info.address);
             }
-
             if(wantsToChange("phone_number"))
             {
                 printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
                 scanf("%s", temp->data.info.phone_number);
             }
-
             if(wantsToChange("Blood_Group"))
             {
                 printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
                 scanf("%s", temp->data.info.blood_group);
             }
-
             if(wantsToChange("Sex"))
             {
                 printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
                 scanf("%c", &t);
                 scanf("%c", &temp->data.info.sex);
             }
-
             if(wantsToChange("Date"))
             {
                 printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
                 scanf("%s", temp->data.info.date);
             }
-
             if(wantsToChange("Time"))
             {
                 printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
                 scanf("%s", temp->data.info.time);
             }
-
             if(wantsToChange("Hospital_name"))
             {
                 printf(TD_BOLD"\t\tEnter Hospital Name: _\b");
                 scanf("%c", &t);
                 scanf("%[^\n]", temp->data.hospital);
             }
-
             if(wantsToChange("Hospital_address"))
             {
                 printf(TD_BOLD"\t\tEnter Hospital Address: _\b");
                 scanf("%c", &t);
                 scanf("%[^\n]", temp->data.hospital_address);
             }
-
 
             FILE *fp = fopen("./database/acceptor.dat", "wb");
             if (!fp)
@@ -997,16 +896,13 @@ void modifyAcceptor()
             headTemplate();
             printf(TD_BOLD TC_RED TD_UNDERLINE"\n\n\t\t\t\tCan't find that ID!");
             removeDecoration();
-        }
-        
+        }    
     }
     else
-        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
-    
+        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");    
     free(box);
 
     int choice;
-
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -1054,7 +950,6 @@ void deleteIdDonor()
 {
     struct donorBox* box = donorDBtoLL();
     struct donorNode *head = box->head;
-    
     int entered = 0;
 
     if (head)
@@ -1073,7 +968,7 @@ void deleteIdDonor()
         }
 
         struct donorNode *temp =  head;
-
+        
         while(head != NULL)
         {
             if (head->data.id == id)
@@ -1103,12 +998,9 @@ void deleteIdDonor()
             printf(TD_BOLD TC_RED"\n\n\n\t\t\tID not Found!\n");
         }
     }
-
-
     free(box);
 
     int choice;
-
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -1117,7 +1009,6 @@ void deleteIdDonor()
         deleteId();
     if (choice == 2)
         main();
-
     removeDecoration();
 }
 
@@ -1125,7 +1016,6 @@ void deleteIdAcceptor()
 {
     struct acceptorBox* box = acceptorDBtoLL();
     struct acceptorNode *head = box->head;
-    
     int entered = 0;
 
     if (head)
@@ -1144,7 +1034,6 @@ void deleteIdAcceptor()
         }
 
         struct acceptorNode *temp =  head;
-
         while(head != NULL)
         {
             if (head->data.info.id == id)
@@ -1153,7 +1042,6 @@ void deleteIdAcceptor()
                 head = head->next;
                 continue;
             }
-
             fwrite(&head->data,sizeof(head->data),1,fp);
             head = head->next;
         }
@@ -1174,12 +1062,9 @@ void deleteIdAcceptor()
             printf(TD_BOLD TC_RED"\n\n\n\t\t\tID not Found!\n");
         }
     }
-
-
     free(box);
 
     int choice;
-
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -1188,9 +1073,7 @@ void deleteIdAcceptor()
         deleteId();
     if (choice == 2)
         main();
-
     removeDecoration();
-    return;
 }
 
 void deleteDonor()
@@ -1209,9 +1092,9 @@ void deleteDonor()
         deleteId();
     if (choice == 2)
         main();
-
     removeDecoration();
 }
+
 void deleteAcceptor()
 {
     clear();
@@ -1228,7 +1111,6 @@ void deleteAcceptor()
         deleteId();
     if (choice == 2)
         main();
-
     removeDecoration();
 }
 
@@ -1287,41 +1169,27 @@ void insertAtPosDonor()
                 t = t->next;
         }
 
-        // temp variable for clearing buffer
         char temp;
-
         struct donorNode *newDonor = (struct donorNode*)malloc(sizeof(struct donorNode));
-        
         newDonor->data.id = getIDInput('d'); 
-
         printf(TD_BOLD"\t\tEnter Donor's name: ");
         scanf("%c", &temp);
         scanf("%[^\n]", newDonor->data.name); 
-        
-
-        printf(TD_BOLD"\t\tEnter Donor's age: _\b");
-        scanf("%d", &newDonor->data.age);
-
+        newDonor->data.age = getAgeInput('d');;
         printf(TD_BOLD"\t\tEnter Donor's nationality: _\b");
         scanf("%s", newDonor->data.nationality);
-
         printf(TD_BOLD"\t\tEnter Donor's address: _\b");
         scanf("%c", &temp);
         scanf("%[^\n]", newDonor->data.address);
-
         printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
         scanf("%s", newDonor->data.phone_number);
-
         printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
         scanf("%s", newDonor->data.blood_group);
-
         printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
         scanf("%c", &temp);
         scanf("%c", &newDonor->data.sex);
-
         printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
         scanf("%s", newDonor->data.date);
-
         printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
         scanf("%s", newDonor->data.time);
 
@@ -1357,7 +1225,6 @@ void insertAtPosDonor()
     sleep(2);
 
     int choice;
-
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -1366,7 +1233,6 @@ void insertAtPosDonor()
         insertAtPos();
     if (choice == 2)
         main();
-
     removeDecoration();
 }
 
@@ -1404,51 +1270,35 @@ void insertAtPosAcceptor()
         }
         
         struct acceptorNode *newAcceptor = (struct acceptorNode*)malloc(sizeof(struct acceptorNode));
-        
-        // temp variable for clearing buffer
         char temp;
-        
-        newAcceptor->data.info.id = getIDInput('a');
 
+        newAcceptor->data.info.id = getIDInput('a');
         printf(TD_BOLD"\t\tEnter Acceptor's name: ");
         scanf("%c", &temp);
         scanf("%[^\n]", newAcceptor->data.info.name); 
-        
-
-        printf(TD_BOLD"\t\tEnter Acceptor's age: _\b");
-        scanf("%d", &newAcceptor->data.info.age);
-
+        newAcceptor->data.info.age = getAgeInput('a');;
         printf(TD_BOLD"\t\tEnter Acceptor's nationality: _\b");
         scanf("%s", newAcceptor->data.info.nationality);
-
         printf(TD_BOLD"\t\tEnter Acceptor's address: _\b");
         scanf("%c", &temp);
         scanf("%[^\n]", newAcceptor->data.info.address);
-
         printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
         scanf("%s", newAcceptor->data.info.phone_number);
-
         printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
         scanf("%s", newAcceptor->data.info.blood_group);
-
         printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
         scanf("%c", &temp);
         scanf("%c", &newAcceptor->data.info.sex);
-
         printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
         scanf("%s", newAcceptor->data.info.date);
-
         printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
         scanf("%s", newAcceptor->data.info.time);
-
         printf(TD_BOLD"\t\tEnter Hospital Name: _\b");
         scanf("%c", &temp);
         scanf("%[^\n]", newAcceptor->data.hospital);
-
         printf(TD_BOLD"\t\tEnter Hospital Address: _\b");
         scanf("%c", &temp);
         scanf("%[^\n]", newAcceptor->data.hospital_address);
-
         if (pos == 1)
         {
             newAcceptor->next = head;
@@ -1459,14 +1309,12 @@ void insertAtPosAcceptor()
             newAcceptor->next = t->next;
             t->next = newAcceptor;
         }
-
         FILE *fp = fopen("./database/acceptor.dat", "wb");
         if (!fp)
         {
            dbError();
            return;
         }
-
         t = head;
         while(t!=NULL)
         {
@@ -1478,8 +1326,7 @@ void insertAtPosAcceptor()
     distroyAcceptor(head);
     free(box);
 
-    int choice;
-
+    int choice;    
     printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
     choice = takeChoice(0, 2);
     if (!choice)
@@ -1488,7 +1335,6 @@ void insertAtPosAcceptor()
         insertAtPos();
     if (choice == 2)
         main();
-
     removeDecoration();
 }
 
@@ -1605,7 +1451,6 @@ void reverseRecordsAcceptor()
     distroyAcceptor(head);
     free(box);
 
-    clear();
     headTemplate();
     printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tReversed!\n");
 
@@ -1618,6 +1463,33 @@ void reverseRecordsAcceptor()
         reverseRecords();
     if (choice == 2)
         main();
+    removeDecoration();
+}
 
+void printIdTree()
+{
+    headTemplate();
+    printf("\n\n");
+    printf(TD_BOLD);
+    struct idTreeNode *root = getTreeID();
+
+    if (root)
+        draw_tree(root);
+    else
+    {
+        printf(TC_RED TD_UNDERLINE TD_BOLD"\t\t\t NO DATA AVAILABLE\n");
+        removeDecoration();
+    }
+
+
+    int choice;
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
+    choice = takeChoice(0, 2);
+    if (!choice)
+        exit(0);
+    if (choice == 1)
+        reverseRecords();
+    if (choice == 2)
+        main();
     removeDecoration();
 }

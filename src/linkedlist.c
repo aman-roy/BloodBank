@@ -21,7 +21,6 @@ struct acceptorNode * getNewAcceptorNode()
     return temp;
 }
 
-
 struct donorBox* donorDBtoLL()
 {
 	FILE *fp = loadFile('d');
@@ -65,8 +64,6 @@ struct donorBox* donorDBtoLL()
     }
     return box;
 }
-
-
 
 struct acceptorBox *acceptorDBtoLL()
 {
@@ -167,4 +164,3 @@ struct acceptorNode * insertAtTopAcceptor(struct acceptorNode * current, struct 
     }
     return current;
 }
-

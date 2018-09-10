@@ -112,3 +112,57 @@ int searchTree(struct idTreeNode* root, int id)
 	if (root->id < id)
 		return searchTree(root->right, id);
 }
+
+void draw_tree_hor2(struct idTreeNode *tree, int depth, char *path, int right)
+{
+    if (tree== NULL)
+        return;
+    depth++;
+
+    draw_tree_hor2(tree->right, depth, path, 1);
+
+    path[depth-2] = 0;
+
+    if(right)
+        path[depth-2] = 1;
+
+    if(tree->left)
+        path[depth-1] = 1;
+
+    printf("\n");
+
+    for(int i=0; i<depth-1; i++)
+    {
+      if(i == depth-2)
+          printf("+");
+      else if(path[i])
+          printf("|");
+      else
+          printf(" ");
+
+      for(int j=1; j<SPACE; j++)
+      if(i < depth-2)
+          printf(" ");
+      else
+          printf("-");
+    }
+
+    printf("%d\n", tree->id);
+    for(int i=0; i<depth; i++)
+    {
+      if(path[i])
+          printf("|");
+      else
+          printf(" ");
+
+      for(int j=1; j<SPACE; j++)
+          printf(" ");
+    }
+    draw_tree_hor2(tree->left, depth, path, 0);
+}
+
+void draw_tree(struct idTreeNode *tree)
+{
+    char path[255] = {};
+    draw_tree_hor2(tree, 0, path, 0);
+}

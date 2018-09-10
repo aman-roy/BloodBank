@@ -48,7 +48,6 @@
 #define BCK_LCYAN "\x1b[106m"
 #define BCK_LWHITE "\x1b[107m"
 
-// Function Prototype
-void removeDecoration();
+#define removeDecoration() printf(TD_DEFAULT)
 
 #endif
