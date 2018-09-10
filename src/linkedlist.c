@@ -61,7 +61,6 @@ struct donorBox* donorDBtoLL()
         box->head = NULL;
         box->count = 0;
     	free(temp);
-        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
     }
     return box;
 }
@@ -99,7 +98,6 @@ struct acceptorBox *acceptorDBtoLL()
         }
         free(temp);
         fclose(fp);
-        
         box->head = front;
         box->count = count;
     }
@@ -108,7 +106,6 @@ struct acceptorBox *acceptorDBtoLL()
         box->head = NULL;
         box->count = 0;
     	free(temp);
-        printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
         sleep(2);
     }
     return box;
