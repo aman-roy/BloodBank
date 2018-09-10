@@ -13,7 +13,7 @@ struct idTreeNode* getTreeID()
 
 	struct acceptorBox* ab = acceptorDBtoLL();
 	struct acceptorNode* acceptorHead = ab->head;
-	struct donorNode* acceptorTemp = acceptorHead;
+	struct acceptorNode* acceptorTemp = acceptorHead;
 	int acceptorCount = ab->count;
 
 	int idArray[donorCount+acceptorCount];

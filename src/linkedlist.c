@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "../include/linkedlist.h"
 #include "../include/containers.h"

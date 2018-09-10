@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "../include/color.h"
 #include "../include/utilities.h"
@@ -135,7 +137,7 @@ void donorAndAccepterDisplay()
 void addNewRecord()
 {
     int choice;
-    char addNext = "n";
+    char addNext = 'n';
     donorAndAccepterDisplay();
     choice = takeChoice(1, 4);
 
@@ -962,7 +964,7 @@ void modifyAcceptor()
             if(wantsToChange("Hospital_address"))
             {
                 printf(TD_BOLD"\t\tEnter Hospital Address: _\b");
-                scanf("%c", &temp);
+                scanf("%c", &t);
                 scanf("%[^\n]", temp->data.hospital_address);
             }
 
@@ -1577,7 +1579,7 @@ void reverseRecordsAcceptor()
     printf(TD_BOLD"\n\n\n\t\t\tReversing Acceptor's Data!\n");
     sleep(2);
 
-    struct accptorNode *temp = head;
+    struct acceptorNode *temp = head;
     while(head != NULL)
     {
         reverse = insertAtTopAcceptor(reverse, head);

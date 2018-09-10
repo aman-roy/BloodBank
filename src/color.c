@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "../include/color.h"
 
 void removeDecoration()

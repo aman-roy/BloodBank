@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include "../include/utilities.h"
 #include "../include/color.h"
