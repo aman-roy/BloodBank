@@ -124,3 +124,16 @@ int isTimeValid(char h1, char h2, char m1, char m2)
 		return 1;
 	return 0;
 }
+
+int isPhoneNumberValid(char* str)
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		if(!isdigit(str[i]))
+			return 0;
+	}
+
+	if (str[0] == '9' || str[0] == '8' || str[0] == '7' || str[0] == '6')
+		return 1;
+	return 0;
+}

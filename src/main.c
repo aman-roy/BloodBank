@@ -189,7 +189,7 @@ void addNewDonor()
     {
         printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
         scanf("%s", newDonor.phone_number);
-        if (strlen(newDonor.phone_number) == 10)
+        if (strlen(newDonor.phone_number) == 10 && isPhoneNumberValid(newDonor.phone_number))
             break;
         printf(TC_RED TD_BOLD"\t\t\tInvalid Phone number!\n");
         removeDecoration();
@@ -263,6 +263,7 @@ void addNewAcceptor()
 
     char temp;
     struct acceptor newAcceptor;
+    int flag = 0;
     
     newAcceptor.info.id = getIDInput('a');
     printf(TD_BOLD"\t\tEnter Acceptor's name: ");
@@ -279,12 +280,12 @@ void addNewAcceptor()
     {
         printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
         scanf("%s", newAcceptor.info.phone_number);
-        if (strlen(newAcceptor.info.phone_number) == 10)
+        if (strlen(newAcceptor.info.phone_number) == 10 && isPhoneNumberValid(newAcceptor.info.phone_number))
             break;
         printf(TC_RED TD_BOLD"\t\t\tInvalid Phone number!\n");
         removeDecoration();
     }
-    int flag = 0;
+    
     do {
         if (flag)
             printf(TC_RED TD_BOLD"\t\t\tInvalid Blood Group!\n");
@@ -762,7 +763,7 @@ void modifyDonor()
 
     if (head)
     {
-        int id;
+        int id, flag = 0;
         clear();
         headTemplate();
         printf(TD_BOLD"\n\n\t\tEnter ID to be modified: ");
@@ -803,29 +804,69 @@ void modifyDonor()
             }
             if(wantsToChange("phone_number"))
             {
-                printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
-                scanf("%s", temp->data.phone_number);
+                while(1)
+                {
+                    printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
+                    scanf("%s", temp->data.phone_number);
+                    if (strlen(temp->data.phone_number) == 10 && isPhoneNumberValid(temp->data.phone_number))
+                        break;
+                    printf(TC_RED TD_BOLD"\t\t\tInvalid Phone number!\n");
+                    removeDecoration();
+                }
             }
             if(wantsToChange("Blood_Group"))
             {
-                printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
-                scanf("%s", temp->data.blood_group);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid Blood Group!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
+                    scanf("%s", temp->data.blood_group);
+                    if(strlen(temp->data.blood_group) >= 2)
+                    {
+                        temp->data.blood_group[0] = toupper(temp->data.blood_group[0]);
+                        temp->data.blood_group[1] = toupper(temp->data.blood_group[1]);
+                    }
+                    flag=1;
+                } while(!isBGValid(temp->data.blood_group));
+                flag = 0;
             }
             if(wantsToChange("Sex"))
             {
-                printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
-                scanf("%c", &t);
-                scanf("%c", &temp->data.sex);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid sex!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
+                    scanf("%c", &t);
+                    scanf("%c", &temp->data.sex);
+                    temp->data.sex = toupper(temp->data.sex);
+                    flag = 1;
+                } while(!isSexValid(temp->data.sex));
+                flag = 0;
             }
             if(wantsToChange("Date"))
             {
-                printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
-                scanf("%s", temp->data.date);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid date!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+                    scanf("%s", temp->data.date);
+                    flag = 1;
+                } while(strlen(temp->data.date) != 10 || !isDateValid(temp->data.date[0], temp->data.date[1], temp->data.date[3], temp->data.date[4]) || !(temp->data.date[2] == '/' && temp->data.date[5]=='/'));
+                flag = 0;
             }
             if(wantsToChange("Time"))
             {
-                printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
-                scanf("%s", temp->data.time);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid time!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+                    scanf("%s", temp->data.time);
+                    flag = 1;
+                } while(strlen(temp->data.time) != 5 || !isTimeValid(temp->data.time[0], temp->data.time[1], temp->data.time[3], temp->data.time[4]) || temp->data.time[2] != ':');
             }
             FILE *fp = fopen("./database/donor.dat", "wb");
             if (!fp)
@@ -882,7 +923,7 @@ void modifyAcceptor()
 
     if (head)
     {
-        int id;
+        int id, flag = 0;
         clear();
         headTemplate();
         printf(TD_BOLD"\n\n\t\tEnter ID to be modified: ");
@@ -920,29 +961,68 @@ void modifyAcceptor()
             }
             if(wantsToChange("phone_number"))
             {
-                printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
-                scanf("%s", temp->data.info.phone_number);
+                while(1)
+                {
+                    printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
+                    scanf("%s", temp->data.info.phone_number);
+                    if (strlen(temp->data.info.phone_number) == 10 && isPhoneNumberValid(temp->data.info.phone_number))
+                        break;
+                    printf(TC_RED TD_BOLD"\t\t\tInvalid Phone number!\n");
+                    removeDecoration();
+                }
             }
             if(wantsToChange("Blood_Group"))
             {
-                printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
-                scanf("%s", temp->data.info.blood_group);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid Blood Group!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
+                    scanf("%s", temp->data.info.blood_group);
+                    if(strlen(temp->data.info.blood_group) >= 2)
+                    {
+                        temp->data.info.blood_group[0] = toupper(temp->data.info.blood_group[0]);
+                        temp->data.info.blood_group[1] = toupper(temp->data.info.blood_group[1]);
+                    }
+                    flag = 1;
+                } while(!isBGValid(temp->data.info.blood_group));
+                flag = 0;
             }
             if(wantsToChange("Sex"))
             {
-                printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
-                scanf("%c", &t);
-                scanf("%c", &temp->data.info.sex);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid sex!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
+                    scanf("%c", &t);
+                    scanf("%c", &temp->data.info.sex);
+                    flag = 1;
+                } while(!isSexValid(temp->data.info.sex));
+                flag = 0;
             }
             if(wantsToChange("Date"))
             {
-                printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
-                scanf("%s", temp->data.info.date);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid date!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+                    scanf("%s", temp->data.info.date);
+                    flag = 1;
+                } while(strlen(temp->data.info.date) != 10 || !isDateValid(temp->data.info.date[0], temp->data.info.date[1], temp->data.info.date[3], temp->data.info.date[4]) || !(temp->data.info.date[2] == '/' && temp->data.info.date[5]=='/'));
+                flag = 0;
             }
             if(wantsToChange("Time"))
             {
-                printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
-                scanf("%s", temp->data.info.time);
+                do {
+                    if (flag)
+                        printf(TC_RED TD_BOLD"\t\t\tInvalid time!\n");
+                    removeDecoration();
+                    printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+                    scanf("%s", temp->data.info.time);
+                    flag = 1;
+                } while(strlen(temp->data.info.time) != 5 || !isTimeValid(temp->data.info.time[0], temp->data.info.time[1], temp->data.info.time[3], temp->data.info.time[4]) || temp->data.info.time[2] != ':');
             }
             if(wantsToChange("Hospital_name"))
             {
@@ -1246,6 +1326,7 @@ void insertAtPosDonor()
             main();
         flag = 1;
     } while(pos < 0 || pos > count+1);
+    flag = 0;
 
     if (pos == count+1)
         addNewDonor();
@@ -1270,17 +1351,62 @@ void insertAtPosDonor()
         printf(TD_BOLD"\t\tEnter Donor's address: _\b");
         scanf("%c", &temp);
         scanf("%[^\n]", newDonor->data.address);
-        printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
-        scanf("%s", newDonor->data.phone_number);
-        printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
-        scanf("%s", newDonor->data.blood_group);
-        printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
-        scanf("%c", &temp);
-        scanf("%c", &newDonor->data.sex);
-        printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
-        scanf("%s", newDonor->data.date);
-        printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
-        scanf("%s", newDonor->data.time);
+
+        while(1)
+        {
+            printf(TD_BOLD"\t\tEnter Donor's phone number: _\b");
+            scanf("%s",  newDonor->data.phone_number);
+            if (strlen(newDonor->data.phone_number) == 10 && isPhoneNumberValid(newDonor->data.phone_number))
+                break;
+            printf(TC_RED TD_BOLD"\t\t\tInvalid Phone number!\n");
+            removeDecoration();
+        }
+
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid Blood Group!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter Donor's blood group: _\b");
+            scanf("%s", newDonor->data.blood_group);
+            if(strlen(newDonor->data.blood_group) >= 2)
+            {
+                newDonor->data.blood_group[0] = toupper(newDonor->data.blood_group[0]);
+                newDonor->data.blood_group[1] = toupper(newDonor->data.blood_group[1]);
+            }
+            flag=1;
+        } while(!isBGValid(newDonor->data.blood_group));
+        flag = 0;
+        
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid sex!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter Donor's sex: _\b");
+            scanf("%c", &temp);
+            scanf("%c", &newDonor->data.sex);
+            newDonor->data.sex = toupper(newDonor->data.sex);
+            flag = 1;
+        } while(!isSexValid(newDonor->data.sex));
+        flag = 0;
+
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid date!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+            scanf("%s", newDonor->data.date);
+            flag = 1;
+        } while(strlen(newDonor->data.date) != 10 || !isDateValid(newDonor->data.date[0], newDonor->data.date[1], newDonor->data.date[3], newDonor->data.date[4]) || !(newDonor->data.date[2] == '/' && newDonor->data.date[5]=='/'));
+        flag = 0;
+
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid time!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+            scanf("%s", newDonor->data.time);
+            flag = 1;
+        } while(strlen(newDonor->data.time) != 5 || !isTimeValid(newDonor->data.time[0], newDonor->data.time[1], newDonor->data.time[3], newDonor->data.time[4]) || newDonor->data.time[2] != ':');
 
         if (pos == 1)
         {
@@ -1346,6 +1472,7 @@ void insertAtPosAcceptor()
             main();
         flag = 1;
     } while(pos < 0 || pos > count+1);
+    flag = 0;
 
     if (pos == count+1)
         addNewAcceptor();
@@ -1371,17 +1498,62 @@ void insertAtPosAcceptor()
         printf(TD_BOLD"\t\tEnter Acceptor's address: _\b");
         scanf("%c", &temp);
         scanf("%[^\n]", newAcceptor->data.info.address);
-        printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
-        scanf("%s", newAcceptor->data.info.phone_number);
-        printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
-        scanf("%s", newAcceptor->data.info.blood_group);
-        printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
-        scanf("%c", &temp);
-        scanf("%c", &newAcceptor->data.info.sex);
-        printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
-        scanf("%s", newAcceptor->data.info.date);
-        printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
-        scanf("%s", newAcceptor->data.info.time);
+
+        while(1)
+        {
+            printf(TD_BOLD"\t\tEnter Acceptor's phone number: _\b");
+            scanf("%s", newAcceptor->data.info.phone_number);
+            if (strlen(newAcceptor->data.info.phone_number) == 10 && isPhoneNumberValid(newAcceptor->data.info.phone_number))
+                break;
+            printf(TC_RED TD_BOLD"\t\t\tInvalid Phone number!\n");
+            removeDecoration();
+        }
+
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid Blood Group!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter Acceptor's blood group: _\b");
+            scanf("%s", newAcceptor->data.info.blood_group);
+            if(strlen(newAcceptor->data.info.blood_group) >= 2)
+            {
+                newAcceptor->data.info.blood_group[0] = toupper(newAcceptor->data.info.blood_group[0]);
+                newAcceptor->data.info.blood_group[1] = toupper(newAcceptor->data.info.blood_group[1]);
+            }
+            flag = 1;
+        } while(!isBGValid(newAcceptor->data.info.blood_group));
+        flag = 0;
+
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid sex!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter Acceptor's sex: _\b");
+            scanf("%c", &temp);
+            scanf("%c", &newAcceptor->data.info.sex);
+            flag = 1;
+        } while(!isSexValid(newAcceptor->data.info.sex));
+        flag = 0;
+
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid date!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter blood donation date[DD/MM/YYYY]: _\b");
+            scanf("%s", newAcceptor->data.info.date);
+            flag = 1;
+        } while(strlen(newAcceptor->data.info.date) != 10 || !isDateValid(newAcceptor->data.info.date[0], newAcceptor->data.info.date[1], newAcceptor->data.info.date[3], newAcceptor->data.info.date[4]) || !(newAcceptor->data.info.date[2] == '/' && newAcceptor->data.info.date[5]=='/'));
+        flag = 0; 
+
+        do {
+            if (flag)
+                printf(TC_RED TD_BOLD"\t\t\tInvalid time!\n");
+            removeDecoration();
+            printf(TD_BOLD"\t\tEnter blood donation time[HH:MM]: _\b");
+            scanf("%s", newAcceptor->data.info.time);
+            flag = 1;
+        } while(strlen(newAcceptor->data.info.time) != 5 || !isTimeValid(newAcceptor->data.info.time[0], newAcceptor->data.info.time[1], newAcceptor->data.info.time[3], newAcceptor->data.info.time[4]) || newAcceptor->data.info.time[2] != ':');
+
         printf(TD_BOLD"\t\tEnter Hospital Name: _\b");
         scanf("%c", &temp);
         scanf("%[^\n]", newAcceptor->data.hospital);

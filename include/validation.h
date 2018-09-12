@@ -4,6 +4,7 @@
 int numLength(int);
 int getIDInput(char);
 int getAgeInput(char);
+int isPhoneNumberValid(char*);
 int isSexValid(char);
 int isBGValid(char*);
 int isDateValid(char, char, char, char);
