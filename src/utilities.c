@@ -16,13 +16,38 @@
 
 int takeChoice(int start, int end)
 {
-    int num;
-    do {
+    char num[10];
+    int result;
+    int error = 0;
+    while(1) 
+    {
+        if (error)
+        {
+            printf(TC_RED TD_BOLD"\t\t\t Wrong Choice!\n");
+            removeDecoration();
+        }
+
         printf(TD_BOLD "\t\t\tEnter Choice: _\b");
-        scanf("%d", &num);
-    } while(num < start || num > end);
+        scanf("%s", num);
+        if(strlen(num) > 2)
+        {
+            error = 1;
+            continue;
+        }
+
+        for (int i = 0; i < strlen(num); ++i)
+        {
+            if(!isdigit(num[i]))
+                continue;
+        }
+        result = atoi(num);
+
+        if(result >= start && result <= end)
+            break;
+        error = 1;
+    }
     removeDecoration();
-    return num;
+    return result;
 }
 
 void dbError()
