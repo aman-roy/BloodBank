@@ -38,7 +38,10 @@ int takeChoice(int start, int end)
         for (int i = 0; i < strlen(num); ++i)
         {
             if(!isdigit(num[i]))
+            {
+                error = 1;
                 continue;
+            }
         }
         result = atoi(num);
 

@@ -485,13 +485,13 @@ void displayDonor()
     }
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        displayRecord();
+        exit(0);
     if (choice == 2)
+        displayRecord();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -535,13 +535,13 @@ void displayAcceptor()
     }
     
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        displayRecord();
+        exit(0);
     if (choice == 2)
+        displayRecord();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -607,9 +607,9 @@ void searchRecord()
         printf(TD_BOLD TC_RED TD_UNDERLINE"\t\t\t\tNO DATA AVAILABLE!\n");
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 for main menu\n");
-    choice = takeChoice(0, 1);
-    if (!choice)
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 for main menu\n");
+    choice = takeChoice(1, 2);
+    if (choice == 1)
         exit(0);
     else
         main();
@@ -972,13 +972,13 @@ void modifyDonor()
     free(box);
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        modifyRecord();
+        exit(0);
     if (choice == 2)
+        modifyRecord();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1140,13 +1140,13 @@ void modifyAcceptor()
     free(box);
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        modifyRecord();
+        exit(0);
     if (choice == 2)
+        modifyRecord();
+    if (choice == 3)
         main();
 
     removeDecoration();
@@ -1238,13 +1238,13 @@ void deleteIdDonor()
     free(box);
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        deleteId();
+        exit(0);
     if (choice == 2)
+        deleteId();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1302,13 +1302,13 @@ void deleteIdAcceptor()
     free(box);
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        deleteId();
+        exit(0);
     if (choice == 2)
+        deleteId();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1321,13 +1321,13 @@ void deleteDonor()
     FILE *fp = fopen("./database/donor.dat", "wb");
     fclose(fp);
 
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    int choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    int choice = takeChoice(1, 3);
     if (choice == 1)
-        deleteId();
+        exit(0);
     if (choice == 2)
+        deleteId();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1340,13 +1340,13 @@ void deleteAcceptor()
     FILE *fp = fopen("./database/acceptor.dat", "wb");
     fclose(fp);
 
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    int choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    int choice = takeChoice(1, 3);
     if (choice == 1)
-        deleteId();
+        exit(0);
     if (choice == 2)
+        deleteId();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1508,13 +1508,13 @@ void insertAtPosDonor()
     sleep(2);
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        insertAtPos();
+        exit(0);
     if (choice == 2)
+        insertAtPos();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1656,13 +1656,13 @@ void insertAtPosAcceptor()
     free(box);
 
     int choice;    
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        insertAtPos();
+        exit(0);
     if (choice == 2)
+        insertAtPos();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1731,13 +1731,13 @@ void reverseRecordsDonor()
     printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tReversed!\n");
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        reverseRecords();
+        exit(0);
     if (choice == 2)
+        reverseRecords();
+    if (choice == 3)
         main();
 
     removeDecoration();
@@ -1784,13 +1784,13 @@ void reverseRecordsAcceptor()
     printf(TD_BOLD TC_GREEN"\n\n\n\t\t\tReversed!\n");
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit, 1 to go back or 2 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
-        exit(0);
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit, 2 to go back or 3 for main menu\n");
+    choice = takeChoice(1, 3);
     if (choice == 1)
-        reverseRecords();
+        exit(0);
     if (choice == 2)
+        reverseRecords();
+    if (choice == 3)
         main();
     removeDecoration();
 }
@@ -1812,11 +1812,11 @@ void printIdTree()
 
 
     int choice;
-    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 0 to exit or 1 for main menu\n");
-    choice = takeChoice(0, 2);
-    if (!choice)
+    printf(TC_GREEN TD_BOLD"\n\n\t\tPress 1 to exit or 2 for main menu\n");
+    choice = takeChoice(1, 2);
+    if (choice == 1)
         exit(0);
-    if (choice)
+    else
         main();
     removeDecoration();
 }
