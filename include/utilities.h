@@ -9,5 +9,7 @@ void dbSetup();
 int wantsToChange(char question[]);
 int isIdUnique(int newID);
 int getIDInput(char mode);
+ssize_t getpasswd (char **pw, size_t sz, int mask, FILE *fp);
+int getMode();
 
 #endif

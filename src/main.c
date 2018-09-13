@@ -14,6 +14,7 @@
 // Function Prototype for displaying
 void headTemplate();
 void mainDisplay();
+void guestDisplay();
 void donorAndAccepterDisplay();
 
 // Function Prototype for each operations
@@ -47,44 +48,98 @@ void insertAtPosAcceptor();
 void reverseRecordsDonor();
 void reverseRecordsAcceptor();
 
+int loginMode = 0;
+
 int main()
 {
-    mainDisplay();
     dbSetup();
-    int ch = takeChoice(1, 10);
-    switch(ch)
+    int error = 0;
+
+    if (!loginMode)
     {
-        case 1:
-            addNewRecord();
-            break;
-        case 2:
-            displayRecord();
-            break;
-        case 3:
-            searchRecord();
-            break;
-        case 4:
-            sortRecord();
-            break;
-        case 5:
-            modifyRecord();
-            break;
-        case 6:
-            deleteId();
-            break;
-        case 7:
-            insertAtPos();
-            break;
-        case 8:
-            reverseRecords();
-            break;
-        case 9:
-            printIdTree();
-        default:
-            printf(TD_BOLD "EXIT!\n");
+        do {    
+            headTemplate();
+            if(error)
+            {
+                printf(TC_RED TD_BOLD"\n\n\t\t\tWrong username or password!\n");
+                removeDecoration();
+            }
+            else 
+                printf("\n\n");
+            loginMode = getMode();
+            error = 1;
+        } while(!loginMode);
+    }
+    
+
+    if(loginMode == 1)
+    {
+        mainDisplay();
+        int ch = takeChoice(1, 10);
+        switch(ch)
+        {
+            case 1:
+                addNewRecord();
+                break;
+            case 2:
+                displayRecord();
+                break;
+            case 3:
+                searchRecord();
+                break;
+            case 4:
+                sortRecord();
+                break;
+            case 5:
+                modifyRecord();
+                break;
+            case 6:
+                deleteId();
+                break;
+            case 7:
+                insertAtPos();
+                break;
+            case 8:
+                reverseRecords();
+                break;
+            case 9:
+                printIdTree();
+                break;
+            default:
+                printf(TD_BOLD "EXIT!\n");
+                exit(0);
+        }
+        removeDecoration();
     }
 
-    removeDecoration();
+    if (loginMode == 2)
+    {
+        guestDisplay();
+        int ch = takeChoice(1, 6);
+        switch(ch)
+        {
+            case 1:
+                displayRecord();
+                break;
+            case 2:
+                searchRecord();
+                break;
+            case 3:
+                sortRecord();
+                break;
+            case 4:
+                reverseRecords();
+                break;
+            case 5:
+                printIdTree();
+                break;
+            default:
+                printf(TD_BOLD "EXIT!\n");
+                exit(0);
+        }
+        removeDecoration();
+    }
+
     return 0;
 }
 
@@ -120,6 +175,19 @@ void mainDisplay()
     printf("\t\t\t8. Reverse records\n");
     printf("\t\t\t9. Print ID tree\n");
     printf("\t\t\t10. Exit\n\n");
+    removeDecoration();
+}
+
+void guestDisplay()
+{
+    headTemplate();
+    printf(TD_BOLD"\n");
+    printf("\t\t\t1. Display Record\n");
+    printf("\t\t\t2. Search Record\n");
+    printf("\t\t\t3. Sort Record\n");
+    printf("\t\t\t4. Reverse records\n");
+    printf("\t\t\t5. Print ID tree\n");
+    printf("\t\t\t6. Exit\n\n");
     removeDecoration();
 }
 
