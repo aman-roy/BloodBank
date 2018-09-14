@@ -48,10 +48,9 @@ void insertAtPosAcceptor();
 void reverseRecordsDonor();
 void reverseRecordsAcceptor();
 
-int loginMode = 0;
-
 int main()
 {
+    static int loginMode = 0;
     dbSetup();
     int error = 0;
 
