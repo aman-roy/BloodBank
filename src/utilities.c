@@ -2,7 +2,7 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <string.h>
-
+#include <stdlib.h>
 #include <termios.h>
 #include <sys/time.h>
 #include <errno.h>   
